@@ -1,0 +1,14 @@
+#!/bin/sh
+echo "Running ESLint..."
+npm run lint
+if [ $? -ne 0 ]; then
+  echo "ESLint checks failed. Aborting push."
+  exit 1
+fi
+
+echo "Running Prettier check..."
+npm run format:check
+if [ $? -ne 0 ]; then
+  echo "Prettier formatting check failed. Aborting push."
+  exit 1
+fi

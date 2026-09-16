@@ -1,0 +1,9 @@
+#!/bin/sh
+commit_message=$(cat "$1")
+pattern="^(feat|fix|docs|style|refactor|test|chore)(\([a-z0-9-]+\))?: .+"
+
+if ! echo "$commit_message" | grep -E -q "$pattern"; then
+  echo "Error: Invalid commit message format: '$commit_message'"
+  echo "Commit messages must follow RS School convention (e.g., 'feat: add header layout' or 'chore: setup eslint')."
+  exit 1
+fi
