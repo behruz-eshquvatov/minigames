@@ -1,15 +1,42 @@
-// Colors
-$color-primary: #6c5ce7;
-$color-primary-hover: #5b4bc4;
-$color-secondary: #a29bfe;
-$color-background: #0f172a;
-$color-surface: #1e293b;
-$color-surface-hover: #334155;
-$color-text: #f8fafc;
-$color-text-secondary: #94a3b8;
-$color-accent: #00cec9;
-$color-danger: #ff7675;
-$color-success: #55efc4;
+// Base
+$color-white: #ffffff; // bg, text color
+$color-black: #000000; // gradient
+
+// General
+$color-bg: #f6f8f3; // base background
+$color-on-bg: #5f5d75; // base text-color
+$color-on-bg-low: #737380; // text-color for additional info
+$color-bg-footer: #1e1b3a; // footer background
+$color-bg-footer-low: #2a264f; // social-link
+$color-bg-footer-lowest: #3c376e; // social-link hover
+$color-on-bg-footer: #b9b5c9; // footer text-color
+$color-surface: #fff8e5; // button-hover
+$color-surface-low: #fffcf5; // input focus
+$color-primary: #ffd02b; // button, text-color
+$color-primary-low: #fde047; // sort-action
+$color-primary-high: #e5b800; // button-hover
+$color-on-primary: #242145; // primary text-color
+$color-secondary: #f0eeff; // badge
+$color-tertiary: #3a2ebf; // table header, button hover
+$color-like: #ff4848; // like icon
+$color-error: #b3261e; // validation error
+$color-price-free: #088a8f; // price
+
+// Borders
+$color-outline: #e6e7eb; // border
+$color-outline-variant: #d2d2d2; // border
+
+// Additional (Avatars)
+$color-avatar-random-1: #e0eef6; // avatar bg
+$color-avatar-random-2: #a3e2c9; // avatar bg
+$color-avatar-random-3: #bce3ff; // avatar bg
+$color-avatar-random-4: #ffc6ff; // avatar bg
+$color-avatar-random-5: #e6dff5; // avatar bg
+
+// Legacy Aliases for Compatibility
+$color-background: $color-bg;
+$color-text: $color-on-bg;
+$color-text-secondary: $color-on-bg-low;
 
 // Typography
 $font-family-base:
@@ -51,7 +78,6 @@ $shadow-md:
 $shadow-lg:
   0 10px 15px -3px rgba(0, 0, 0, 0.1),
   0 4px 6px -2px rgba(0, 0, 0, 0.05);
-$shadow-glow: 0 0 20px rgba(108, 92, 231, 0.4);
 
 // Spacing & Sizes
 $spacing-xs: 4px;
