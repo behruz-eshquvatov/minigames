@@ -1,0 +1,306 @@
+@use '../../styles/tokens' as *;
+@use '../../styles/breakpoints' as *;
+@use '../../styles/mixins' as *;
+
+.carousel-section {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: $size-5 $size-15;
+
+  @include respond-to('tablet') {
+    padding: $size-3 $size-4;
+  }
+
+  @include respond-to('mobile') {
+    padding: $size-2 $size-2;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: $size-5;
+
+    @include respond-to('tablet') {
+      gap: $size-4;
+    }
+
+    @include respond-to('mobile') {
+      gap: $size-2;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+    font-family: $font-family-heading;
+    font-size: $font-size-headline-large;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+
+    @include respond-to('tablet') {
+      font-size: $font-size-headline-medium;
+    }
+
+    @include respond-to('mobile') {
+      font-size: $font-size-headline-medium;
+    }
+
+    &-pill {
+      display: inline-block;
+      width: $size-1;
+      height: $size-4;
+      background-color: $color-primary; // #FFD02B
+      border-radius: $corner-extra-large;
+      border: 1.5px solid $color-on-primary;
+
+      @include respond-to('tablet') {
+        height: $size-3;
+      }
+    }
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+
+    @include respond-to('mobile') {
+      display: none;
+    }
+  }
+
+  &__control-btn {
+    width: $size-6;
+    height: $size-6;
+    border-radius: $corner-full;
+    border: 2px solid $color-on-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &--prev {
+      background-color: $color-white;
+
+      &:hover {
+        background-color: $color-surface;
+      }
+    }
+
+    &--next {
+      background-color: $color-primary;
+      rotate: 180deg;
+      &:hover {
+        background-color: $color-primary-high;
+      }
+    }
+  }
+
+  &__track-wrapper {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 4px; // Allows shadow and rounded borders to render without clipping
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__track {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 4px 8px 12px 8px;
+    width: 100%;
+
+    @include respond-to('mobile') {
+      gap: 5.5px;
+      padding: 4px 4px 12px 4px;
+    }
+  }
+}
+
+// Game Card Component
+.game-card {
+  position: relative;
+  flex-shrink: 1;
+  height: 384px;
+  border-radius: $corner-extra-large; // 24px
+  border: 3px solid $color-on-primary;
+  overflow: hidden;
+  box-shadow: 4px 4px 0px 0px $color-on-primary;
+  background-color: $color-surface;
+  transition: all 0.2s ease;
+
+  // Exact Desktop widths at 1920px, fluid scaling down to 1025px so all 5 fit visible
+  &--wide {
+    width: 816px;
+    max-width: 50%;
+
+    @media (min-width: 1920px) {
+      width: 816px;
+      max-width: 816px;
+    }
+  }
+
+  &--normal {
+    width: 288px;
+    max-width: 17.5%;
+
+    @media (min-width: 1920px) {
+      width: 288px;
+      max-width: 288px;
+    }
+  }
+
+  &--narrow {
+    width: 120px;
+    max-width: 7.5%;
+
+    @media (min-width: 1920px) {
+      width: 120px;
+      max-width: 120px;
+    }
+  }
+
+  // Tablet & laptop viewports (<= 768px) - exactly 3 resizable cards (1st and 5th hidden)
+  @media (max-width: 768px) {
+    &:nth-child(1),
+    &:nth-child(5) {
+      display: none !important;
+    }
+
+    &--wide {
+      width: 448px;
+      max-width: 60%;
+    }
+
+    &--normal,
+    &--narrow {
+      width: 104px;
+      max-width: 20%;
+    }
+  }
+
+  @include respond-to('tablet') {
+    height: 280px;
+    border: 2px solid $color-on-primary;
+    border-radius: $corner-large; // 16px
+    box-shadow: 4px 4px 0px 0px $color-on-primary;
+  }
+
+  // Mobile overrides (<= 576px)
+  @include respond-to('mobile') {
+    height: 200px;
+    border: 2px solid $color-on-primary;
+    border-radius: $corner-large;
+    box-shadow: 4px 4px 0px 0px $color-on-primary;
+
+    &--wide {
+      width: 218px;
+      max-width: 60%;
+    }
+
+    &--normal,
+    &--narrow {
+      width: 120px;
+      max-width: 20%;
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  &__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: $size-2;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.4) 17.31%,
+      rgba(0, 0, 0, 0.85) 46.15%
+    );
+    color: $color-white;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: $size-1;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-body-large;
+    font-weight: $font-weight-bold;
+    color: $color-white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include respond-to('mobile') {
+      font-size: $font-size-body-small; // 14px
+    }
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: $font-size-body-medium;
+    font-weight: $font-weight-bold;
+
+    @include respond-to('mobile') {
+      font-size: $font-size-label-medium;
+    }
+  }
+
+  &__rating,
+  &__likes {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  // -------------------------------------------------------------
+  // CRITICAL REQUIREMENT:
+  // Cards < 288px width display ONLY the game image:
+  // no text, no rating, no icons, no info overlay.
+  // -------------------------------------------------------------
+  &--narrow {
+    .game-card__overlay {
+      display: none !important;
+    }
+  }
+}
+
+// Media query check to ensure any card dynamically rendered < 288px hides overlay
+@media (max-width: 768px) {
+  .game-card {
+    &--normal,
+    &--narrow {
+      .game-card__overlay {
+        display: none !important;
+      }
+    }
+  }
+}
