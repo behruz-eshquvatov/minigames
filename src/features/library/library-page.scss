@@ -1,0 +1,511 @@
+@use '../../styles/tokens' as *;
+@use '../../styles/breakpoints' as *;
+@use '../../styles/mixins' as *;
+
+.library-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $size-6;
+  padding: $size-6 $size-15;
+  max-width: 1920px;
+  margin: 0 auto;
+
+  @media (max-width: 1280px) {
+    padding: $size-4 $size-6;
+  }
+
+  @include respond-to('tablet') {
+    padding: $size-4 $size-4;
+    gap: $size-4;
+  }
+
+  @include respond-to('mobile') {
+    padding: $size-3 $size-2;
+    gap: $size-3;
+  }
+}
+
+// Section Header: Title, Filters & Sort
+.library-filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: $size-3;
+
+  &__top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: $size-2;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+    font-family: $font-family-heading;
+    font-size: $font-size-headline-large;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+
+    @include respond-to('tablet') {
+      font-size: $font-size-headline-medium;
+    }
+
+    @include respond-to('mobile') {
+      font-size: $font-size-headline-medium;
+    }
+
+    &-pill {
+      display: inline-block;
+      width: $size-1;
+      height: $size-4;
+      background-color: $color-primary;
+      border-radius: $corner-extra-large;
+      border: 1.5px solid $color-on-primary;
+
+      @include respond-to('tablet') {
+        height: $size-3;
+      }
+    }
+  }
+
+  // Sorting Custom Dropdown
+  &__sort-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__sort-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-1;
+    padding: $size-1 $size-2;
+    background-color: $color-white;
+    color: $color-on-primary;
+    border: 2px solid $color-on-primary;
+    border-radius: $corner-medium;
+    box-shadow: $shadow-level-1;
+    font-family: $font-family-base;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: $color-surface;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-tertiary;
+      outline-offset: 2px;
+    }
+
+    &:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    svg {
+      width: $size-2;
+      height: $size-2;
+      transition: transform 0.2s ease;
+    }
+
+    &--open svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__sort-dropdown {
+    position: absolute;
+    top: calc(100% + #{$size-1});
+    right: 0;
+    min-width: 160px;
+    background-color: $color-white;
+    border: 2px solid $color-on-primary;
+    border-radius: $corner-medium;
+    box-shadow: $shadow-level-2;
+    list-style: none;
+    padding: $size-05 0;
+    z-index: 50;
+    display: none;
+
+    &--open {
+      display: block;
+    }
+  }
+
+  &__sort-item {
+    padding: $size-1 $size-2;
+    font-family: $font-family-base;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-medium;
+    color: $color-on-primary;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: $color-secondary;
+    }
+
+    &--active {
+      background-color: $color-primary;
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  // Filter Chips Row (No wrap, horizontally swipeable with hidden scrollbar)
+  &__chips-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: $size-05 0;
+    cursor: grab;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  &__chips-row {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-1;
+    white-space: nowrap;
+    min-width: 100%;
+  }
+
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    padding: $size-1 $size-2;
+    background-color: $color-white;
+    color: $color-on-primary;
+    border: 2px solid $color-on-primary;
+    border-radius: $corner-full;
+    font-family: $font-family-base;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0px 0px $color-on-primary;
+    transition: all 0.2s ease;
+    user-select: none;
+    flex-shrink: 0;
+
+    &:hover {
+      background-color: $color-surface;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-tertiary;
+      outline-offset: 2px;
+    }
+
+    &:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    &--active {
+      background-color: $color-primary;
+      border-color: $color-on-primary;
+      font-weight: $font-weight-bold;
+      box-shadow: none;
+
+      &:hover {
+        background-color: $color-primary-high;
+      }
+    }
+  }
+}
+
+// Game Cards Grid Section
+.library-grid-section {
+  width: 100%;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $size-3;
+    width: 100%;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: $size-2;
+    }
+
+    @include respond-to('tablet') {
+      grid-template-columns: repeat(2, 1fr);
+      gap: $size-2;
+    }
+
+    @include respond-to('mobile') {
+      grid-template-columns: 1fr;
+      gap: $size-2;
+    }
+  }
+}
+
+// Library Game Card
+.library-card {
+  background-color: $color-white;
+  border: 2.5px solid $color-on-primary;
+  border-radius: $corner-extra-large;
+  box-shadow: $shadow-level-2;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+
+  @include respond-to('mobile') {
+    border-radius: $corner-large;
+    box-shadow: $shadow-level-1;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-level-3;
+  }
+
+  &__thumb-wrap {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    background-color: $color-surface;
+
+    @include respond-to('mobile') {
+      height: 160px;
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__rating {
+    position: absolute;
+    top: $size-1;
+    right: $size-1;
+    background-color: rgba(36, 33, 69, 0.85);
+    color: $color-white;
+    font-size: $font-size-label-small;
+    font-weight: $font-weight-bold;
+    padding: $size-05 $size-1;
+    border-radius: $corner-full;
+    display: inline-flex;
+    align-items: center;
+    gap: $size-05;
+
+    img {
+      width: $size-1;
+      height: $size-1;
+    }
+  }
+
+  &__body {
+    padding: $size-2;
+    display: flex;
+    flex-direction: column;
+    gap: $size-1;
+    flex: 1;
+  }
+
+  &__category {
+    font-family: $font-family-base;
+    font-size: $font-size-label-small;
+    font-weight: $font-weight-bold;
+    color: $color-tertiary;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-body-large;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__description {
+    font-family: $font-family-base;
+    font-size: $font-size-body-small;
+    line-height: 1.4;
+    color: $color-on-bg-low;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 2.8em;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: $size-1;
+    border-top: 1px solid $color-outline;
+  }
+
+  &__price {
+    font-family: $font-family-base;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-bold;
+    color: $color-price-free;
+
+    &--paid {
+      color: $color-on-primary;
+    }
+  }
+
+  &__details-btn {
+    padding: $size-05 $size-2;
+    background-color: $color-primary;
+    color: $color-on-primary;
+    font-family: $font-family-base;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-bold;
+    border-radius: $corner-medium;
+    border: 1.5px solid $color-on-primary;
+    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0px 0px $color-on-primary;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: $color-primary-high;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-tertiary;
+      outline-offset: 2px;
+    }
+
+    &:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+  }
+}
+
+// Pagination Section
+.library-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $size-1;
+  padding: $size-3 0;
+
+  &__arrow-btn {
+    width: $size-5;
+    height: $size-5;
+    border-radius: $corner-full;
+    border: 2px solid $color-on-primary;
+    background-color: $color-white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0px 0px $color-on-primary;
+    transition: all 0.2s ease;
+
+    img {
+      width: $size-2;
+      height: $size-2;
+      display: block;
+    }
+
+    &--next img {
+      transform: rotate(180deg);
+    }
+
+    &:hover:not(:disabled) {
+      background-color: $color-surface;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-tertiary;
+      outline-offset: 2px;
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  }
+
+  &__pages-list {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__page-btn {
+    width: $size-5;
+    height: $size-5;
+    border-radius: $corner-medium;
+    border: 2px solid $color-on-primary;
+    background-color: $color-white;
+    color: $color-on-primary;
+    font-family: $font-family-base;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0px 0px $color-on-primary;
+    transition: all 0.2s ease;
+
+    &:hover:not(&--active) {
+      background-color: $color-surface;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-tertiary;
+      outline-offset: 2px;
+    }
+
+    &:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    &--active {
+      background-color: $color-primary;
+      cursor: default;
+    }
+
+    // Mobile limit: 3 pages per spec
+    &--desktop-only {
+      @include respond-to('mobile') {
+        display: none !important;
+      }
+    }
+  }
+}

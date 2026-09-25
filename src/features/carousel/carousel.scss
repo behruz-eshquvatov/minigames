@@ -163,7 +163,13 @@
   overflow: hidden;
   box-shadow: $shadow-level-1;
   background-color: $color-surface;
-  transition: all 0.2s ease;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+
+  &:focus-visible {
+    outline: 2px solid $color-tertiary;
+    outline-offset: 2px;
+  }
 
   // Exact Desktop widths at 1920px, fluid scaling down to 1025px so all 5 fit visible
   &--wide {

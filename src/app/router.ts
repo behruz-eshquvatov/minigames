@@ -6,10 +6,14 @@ export interface Route {
 export class Router {
   private routes: Route[] = [];
   private rootElement: HTMLElement;
+  private currentPath = '';
 
   public constructor(rootElement: HTMLElement) {
     this.rootElement = rootElement;
     window.addEventListener('popstate', (): void => {
+      this.handleRoute();
+    });
+    window.addEventListener('hashchange', (): void => {
       this.handleRoute();
     });
   }
@@ -19,14 +23,32 @@ export class Router {
   }
 
   public navigate(path: string): void {
-    window.history.pushState({}, '', path);
-    this.handleRoute();
+    window.location.hash = path.startsWith('#') ? path : `#${path}`;
+  }
+
+  public getCurrentRoute(): string {
+    const hash = window.location.hash.replace(/^#\/?/, '');
+    if (hash === 'library') {
+      return 'library';
+    }
+    const path = window.location.pathname.replaceAll(/^\/|\/$/g, '');
+    if (path.endsWith('library')) {
+      return 'library';
+    }
+    return 'home';
   }
 
   public handleRoute(): void {
-    const currentPath: string = window.location.pathname;
+    const routeName = this.getCurrentRoute();
+    const targetPath = routeName === 'library' ? '/library' : '/';
+
+    if (this.currentPath === targetPath && this.rootElement.children.length > 0) {
+      return;
+    }
+    this.currentPath = targetPath;
+
     const matchedRoute: Route | undefined = this.routes.find(
-      (route: Route): boolean => route.path === currentPath
+      (route: Route): boolean => route.path === targetPath
     );
 
     this.rootElement.innerHTML = '';
@@ -34,7 +56,7 @@ export class Router {
       this.rootElement.append(matchedRoute.render());
     } else {
       const fallbackRoute: Route | undefined = this.routes.find(
-        (route: Route): boolean => route.path === '*' || route.path === '/'
+        (route: Route): boolean => route.path === '/'
       );
       if (fallbackRoute) {
         this.rootElement.append(fallbackRoute.render());
