@@ -8,10 +8,10 @@
   &__container {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: $corner-medium;
 
     @include respond-to('mobile') {
-      gap: 8px;
+      gap: $size-1;
     }
   }
 
@@ -68,16 +68,16 @@
   background-color: $color-white;
   border-radius: $corner-large;
   border: 2.5px solid $color-on-primary;
-  box-shadow: 6px 6px 0px 0px $color-on-primary;
+  box-shadow: $shadow-level-2;
   overflow: hidden;
 
   @include respond-to('tablet') {
-    box-shadow: 4px 4px 0px 0px $color-on-primary;
+    box-shadow: $shadow-level-1;
   }
 
   @include respond-to('mobile') {
-    border-radius: $corner-large; // 16px
-    box-shadow: 4px 4px 0px 0px $color-on-primary;
+    border-radius: $corner-large;
+    box-shadow: $shadow-level-1;
   }
 }
 
@@ -92,8 +92,8 @@
 
     tr {
       th {
-        min-width: 128px;
-        padding: 24px;
+        min-width: calc(#{$size-15} + #{$size-1});
+        padding: $size-3;
         font-family: $font-family-base;
         font-size: $font-size-label-large;
         font-weight: $font-weight-bold;
@@ -118,21 +118,13 @@
         }
 
         @include respond-to('tablet') {
-          padding: 16px;
+          padding: $size-2;
           font-size: $font-size-body-small;
         }
         @include respond-to('mobile') {
           min-width: auto;
-          padding: 16px 8px;
+          padding: $size-2 $size-1;
           font-size: $font-size-body-small;
-
-          .th-desktop {
-            display: none;
-          }
-
-          .th-mobile {
-            display: inline;
-          }
         }
       }
     }
@@ -153,7 +145,7 @@
       }
 
       td {
-        padding: 16px 24px;
+        padding: $size-2 $size-3;
         vertical-align: middle;
         text-align: center;
         font-family: $font-family-base;
@@ -162,12 +154,12 @@
         color: $color-on-primary;
 
         @include respond-to('tablet') {
-          padding: 14px 16px;
+          padding: calc(#{$size-2} - 2px) $size-2;
           font-size: $font-size-body-small;
         }
 
         @include respond-to('mobile') {
-          padding: 20px 8px;
+          padding: calc(#{$size-2} + 4px) $size-1;
           font-size: $font-size-body-small;
         }
       }
@@ -176,18 +168,18 @@
 
   // Column specific alignments and responsivness
   .col-rank {
-    width: 80px;
+    width: $size-10;
 
     @include respond-to('mobile') {
-      width: 50px;
+      width: calc(#{$size-6} + 2px);
     }
   }
 
   .col-player {
-    min-width: 180px;
+    min-width: calc(#{$size-15} + #{$size-7} + 4px);
 
     @include respond-to('mobile') {
-      min-width: 120px;
+      min-width: $size-15;
     }
   }
 
@@ -214,7 +206,7 @@
   font-weight: $font-weight-bold;
 
   &--1 {
-    color: #3a2ebf; // Or gold #FFD02B with shadow
+    color: $color-tertiary;
     font-size: 1.1em;
   }
 }
@@ -222,34 +214,34 @@
 .player-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: $corner-medium;
 
   @include respond-to('mobile') {
-    gap: 8px;
+    gap: $size-1;
   }
 }
 
 .player-avatar {
-  width: 36px;
-  height: 36px;
+  width: calc(#{$size-4} + 4px);
+  height: calc(#{$size-4} + 4px);
   border-radius: 50%;
   border: 1.5px solid $color-on-primary;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: $font-weight-bold;
-  font-size: 12px;
+  font-size: $font-size-label-medium;
   color: $color-on-primary;
   flex-shrink: 0;
 
   @include respond-to('tablet') {
-    width: 28px;
-    height: 28px;
+    width: calc(#{$size-3} + 4px);
+    height: calc(#{$size-3} + 4px);
     font-size: $font-size-label-small;
   }
   @include respond-to('mobile') {
-    width: 24px;
-    height: 24px;
+    width: $size-3;
+    height: $size-3;
     font-size: $font-size-label-small;
   }
 }
@@ -300,8 +292,9 @@
 
 .favorite-badge {
   display: inline-block;
-  padding: 4px 12px;
+  padding: $size-05 $corner-medium;
   border: 1.5px solid $color-on-primary;
+
   border-radius: $radius-full;
   font-size: $font-size-label-large;
   font-weight: $font-weight-semibold;

@@ -92,8 +92,8 @@
 
   &__burger-btn {
     display: none;
-    width: 40px;
-    height: 40px;
+    width: $size-5;
+    height: $size-5;
     padding: $size-1;
     background-color: $color-white;
     border: 2px solid $color-on-primary;
@@ -101,6 +101,15 @@
     cursor: pointer;
     z-index: 101;
     transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $color-surface;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-tertiary;
+      outline-offset: 2px;
+    }
 
     @media (max-width: 768px) {
       display: flex;
@@ -111,8 +120,8 @@
     .site-header__burger-icon {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      width: 18px;
+      gap: $size-05;
+      width: calc(#{$size-2} + 2px);
     }
 
     .site-header__burger-line {
@@ -128,13 +137,13 @@
 
     &--open {
       .site-header__burger-line:nth-child(1) {
-        transform: translateY(6px) rotate(45deg);
+        transform: translateY(calc(#{$size-1} - 2px)) rotate(45deg);
       }
       .site-header__burger-line:nth-child(2) {
         opacity: 0;
       }
       .site-header__burger-line:nth-child(3) {
-        transform: translateY(-6px) rotate(-45deg);
+        transform: translateY(calc(2px - #{$size-1})) rotate(-45deg);
       }
     }
   }
@@ -153,6 +162,15 @@
   cursor: pointer;
   transition: all 0.2s ease;
   height: min-content;
+
+  &:focus-visible {
+    outline: 2px solid $color-tertiary;
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
 
   &--primary {
     background-color: $color-primary;
@@ -236,10 +254,10 @@
   }
 
   &__close-btn {
-    width: 40px;
-    height: 40px;
-    background-color: $color-bg-footer-low; // #2A264F
-    border-radius: $corner-medium; // 12px
+    width: $size-5;
+    height: $size-5;
+    background-color: $color-bg-footer-low;
+    border-radius: $corner-medium;
     border: none;
     display: flex;
     align-items: center;
@@ -248,7 +266,12 @@
     transition: background-color 0.2s ease;
 
     &:hover {
-      background-color: $color-bg-footer-lowest; // #3C376E
+      background-color: $color-bg-footer-lowest;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
     }
   }
 
@@ -263,7 +286,7 @@
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: $size-3; // 24px gap
+    gap: $size-3;
     margin: 0;
   }
 
@@ -271,13 +294,13 @@
     font-family: $font-family-heading;
     font-size: $font-size-headline-small;
     font-weight: $font-weight-medium;
-    color: $color-on-bg-footer; // #B9B5C9
+    color: $color-on-bg-footer;
     text-decoration: none;
     transition: color 0.2s ease;
 
     &:hover,
     &--active {
-      color: $color-primary; // #FFD02B (Yellow active link)
+      color: $color-primary;
     }
     &--active {
       font-weight: $font-weight-bold;
@@ -293,7 +316,7 @@
 
     .btn {
       width: 100%;
-      height: 48px;
+      height: $size-6;
     }
   }
 }

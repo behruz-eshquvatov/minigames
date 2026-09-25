@@ -39,7 +39,8 @@ export class Footer {
               <h3 class="site-footer__col-title">Explore</h3>
               <ul class="site-footer__list">
                 <li><a href="#" class="site-footer__link">Home</a></li>
-                <li><a href="#" class="site-footer__link">Library</a></li>
+                <li><a href="#library" class="site-footer__link">Library</a></li>
+
                 <li><a href="#" class="site-footer__link">Categories</a></li>
                 <li><a href="#" class="site-footer__link">Tournaments</a></li>
               </ul>

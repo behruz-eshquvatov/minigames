@@ -77,21 +77,39 @@ export class Carousel {
             New Games
           </h2>
           <div class="carousel-section__controls">
-            <button class="carousel-section__control-btn carousel-section__control-btn--prev" aria-label="Previous slide">
-              <img src='${arrow_back}' alt ='arrow'/>
+            <button type="button" class="carousel-section__control-btn carousel-section__control-btn--prev" aria-label="Previous slide">
+              <img src='${arrow_back}' alt='Previous' />
             </button>
-            <button class="carousel-section__control-btn carousel-section__control-btn--next" aria-label="Next slide">
-              <img src='${arrow_back}' alt ='arrow'/>
+            <button type="button" class="carousel-section__control-btn carousel-section__control-btn--next" aria-label="Next slide">
+              <img src='${arrow_back}' alt='Next' />
             </button>
           </div>
         </div>
 
         <div class="carousel-section__track-wrapper">
-          <div class="carousel-section__track">
-            ${games
-              .map(
-                (game: CarouselGame): string => `
-              <div class="game-card game-card--${game.widthType}">
+          <div class="carousel-section__track"></div>
+        </div>
+      </div>
+    `;
+
+    const widthTypes: ('narrow' | 'normal' | 'wide')[] = [
+      'narrow',
+      'normal',
+      'wide',
+      'normal',
+      'narrow',
+    ];
+
+    const renderTrack = (): void => {
+      const track: HTMLElement | null = section.querySelector('.carousel-section__track');
+      if (!track) {
+        return;
+      }
+      track.innerHTML = games
+        .map((game: CarouselGame, index: number): string => {
+          const widthType = widthTypes[index] || 'normal';
+          return `
+              <div class="game-card game-card--${widthType}" tabindex="0" role="group" aria-label="${game.title}">
                 <img src="${game.image}" alt="${game.title}" class="game-card__image" />
                 <div class="game-card__overlay">
                   <div class="game-card__info">
@@ -109,13 +127,39 @@ export class Carousel {
                   </div>
                 </div>
               </div>
-            `
-              )
-              .join('')}
-          </div>
-        </div>
-      </div>
-    `;
+            `;
+        })
+        .join('');
+    };
+
+    renderTrack();
+
+    const prevBtn: HTMLButtonElement | null = section.querySelector(
+      '.carousel-section__control-btn--prev'
+    );
+    const nextBtn: HTMLButtonElement | null = section.querySelector(
+      '.carousel-section__control-btn--next'
+    );
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', (): void => {
+        const last = games.pop();
+        if (last) {
+          games.unshift(last);
+          renderTrack();
+        }
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', (): void => {
+        const first = games.shift();
+        if (first) {
+          games.push(first);
+          renderTrack();
+        }
+      });
+    }
 
     return section;
   }

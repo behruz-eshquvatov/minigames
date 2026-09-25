@@ -25,6 +25,10 @@
   margin: 0 auto;
   padding: $size-5 $size-15;
 
+  @media (max-width: 1280px) {
+    padding: $size-4 $size-6;
+  }
+
   @include respond-to('tablet') {
     padding: $size-3 $size-4;
   }

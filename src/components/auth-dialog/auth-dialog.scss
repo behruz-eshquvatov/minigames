@@ -14,7 +14,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: $size-2;
   opacity: 0;
   transition: opacity 0.25s ease;
 
@@ -25,11 +25,11 @@
 
 .auth-dialog {
   width: 420px;
-  max-width: calc(100vw - 32px);
+  max-width: calc(100vw - #{$size-4});
   background-color: $color-bg;
   border-radius: $corner-extra-large;
   border: 3px solid $color-on-primary;
-  box-shadow: 6px 6px 0px 0px $color-on-primary;
+  box-shadow: $shadow-level-2;
   padding: $size-4;
   display: flex;
   flex-direction: column;
@@ -39,7 +39,7 @@
   transition:
     transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
     opacity 0.25s ease;
-  max-height: calc(100vh - 32px);
+  max-height: calc(100vh - #{$size-4});
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -54,9 +54,9 @@
   }
 
   @include respond-to('mobile') {
-    padding: 20px;
+    padding: calc(#{$size-2} + 4px);
     border-radius: $corner-large;
-    box-shadow: 4px 4px 0px 0px $color-on-primary;
+    box-shadow: $shadow-level-1;
   }
 
   &__switcher {
@@ -115,7 +115,7 @@
     text-align: center;
     font-size: $font-size-body-small;
     color: $color-on-bg;
-    margin-top: 24px;
+    margin-top: $size-3;
 
     .auth-switch-link {
       color: $color-on-primary;
@@ -130,7 +130,7 @@
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: $size-2;
 
   &__forgot-link {
     align-self: flex-end;
@@ -149,9 +149,9 @@
     font-size: $font-size-body-medium;
     border: 2px solid $color-on-primary;
     border-radius: $corner-medium;
-    box-shadow: 0px 4px 0px 0px $color-on-primary;
-    padding: 16px;
-    margin-top: 8px;
+    box-shadow: 0px $size-05 0px 0px $color-on-primary;
+    padding: $size-2;
+    margin-top: $size-1;
     cursor: pointer;
     transition: all 0.2s ease;
 
@@ -159,9 +159,14 @@
       background-color: $color-primary-high;
     }
 
+    &:focus-visible {
+      outline: 2px solid $color-tertiary;
+      outline-offset: 2px;
+    }
+
     &:active {
       transform: translateY(1px);
-      box-shadow: 0px 1px 0px 0px $color-on-primary;
+      box-shadow: none;
     }
   }
 }
@@ -169,7 +174,7 @@
 .auth-field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: $size-1;
 
   &__label {
     font-size: $font-size-label-large;
@@ -183,8 +188,8 @@
     background-color: $color-white;
     border: 2px solid $color-on-primary;
     border-radius: $corner-small;
-    padding: 12px $size-2;
-    gap: 10px;
+    padding: $corner-medium $size-2;
+    gap: calc(#{$size-1} + 2px);
     transition:
       border-color 0.2s ease,
       box-shadow 0.2s ease;
@@ -231,8 +236,8 @@
 .auth-divider {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin: 16px 0;
+  gap: $size-2;
+  margin: $size-2 0;
 
   &__line {
     flex: 1;
@@ -261,11 +266,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: $size-2;
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover {
     background-color: $color-surface-low;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-tertiary;
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: translateY(1px);
   }
 }

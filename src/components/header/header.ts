@@ -32,7 +32,7 @@ export class Header {
 
     // Logo
     const logo: HTMLAnchorElement = document.createElement('a');
-    logo.href = '/';
+    logo.href = '#';
     logo.className = 'site-header__logo';
     logo.innerHTML = `
       <div class="site-header__logo-icon">
@@ -47,16 +47,16 @@ export class Header {
     nav.innerHTML = `
       <ul class="site-header__nav-list">
         <li class="site-header__nav-item">
-          <a href="/" class="site-header__nav-link site-header__nav-link--active">Home</a>
+          <a href="#" class="site-header__nav-link site-header__nav-link--active">Home</a>
         </li>
         <li class="site-header__nav-item">
-          <a href="/" class="site-header__nav-link">Library</a>
+          <a href="#library" class="site-header__nav-link">Library</a>
         </li>
         <li class="site-header__nav-item">
-          <a href="/" class="site-header__nav-link">Tournaments</a>
+          <a href="#" class="site-header__nav-link">Tournaments</a>
         </li>
         <li class="site-header__nav-item">
-          <a href="/" class="site-header__nav-link">Community</a>
+          <a href="#" class="site-header__nav-link">Community</a>
         </li>
       </ul>
     `;
@@ -108,7 +108,7 @@ export class Header {
     this.mobileMenuOverlay.className = 'mobile-menu';
     this.mobileMenuOverlay.innerHTML = `
       <div class="mobile-menu__header">
-        <a href="/" class="mobile-menu__logo">
+        <a href="#" class="mobile-menu__logo">
           <div class="mobile-menu__logo-icon">
             <img src="${logoPng}" alt="MiniGames Logo" class="mobile-menu__logo-img" />
           </div>
@@ -122,10 +122,10 @@ export class Header {
       </div>
       <div class="mobile-menu__content">
         <ul class="mobile-menu__nav-list">
-          <li><a href="/" class="mobile-menu__nav-link mobile-menu__nav-link--active">Home</a></li>
-          <li><a href="/" class="mobile-menu__nav-link">Library</a></li>
-          <li><a href="/" class="mobile-menu__nav-link">Tournaments</a></li>
-          <li><a href="/" class="mobile-menu__nav-link">Community</a></li>
+          <li><a href="#" class="mobile-menu__nav-link mobile-menu__nav-link--active">Home</a></li>
+          <li><a href="#library" class="mobile-menu__nav-link">Library</a></li>
+          <li><a href="#" class="mobile-menu__nav-link">Tournaments</a></li>
+          <li><a href="#" class="mobile-menu__nav-link">Community</a></li>
         </ul>
         <div class="mobile-menu__actions">
           <button class="btn btn--outline-dark mobile-menu__login-btn">Log In</button>

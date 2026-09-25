@@ -26,7 +26,7 @@
   &__main {
     display: flex;
     justify-content: space-between;
-    gap: 48px;
+    gap: $size-6;
     padding-bottom: $size-8;
 
     @include respond-to('tablet') {
@@ -96,23 +96,23 @@
 
   &__nav-group {
     display: flex;
-    gap: 80px;
+    gap: $size-10;
 
     @include respond-to('tablet') {
-      gap: 40px;
+      gap: $size-5;
     }
 
     @include respond-to('mobile') {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 40px;
+      gap: $size-5;
     }
   }
 
   &__col {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: $size-2;
 
     &--community {
       @include respond-to('mobile') {
@@ -132,7 +132,7 @@
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: $size-2;
     margin: 0;
     padding: 0;
   }
@@ -164,12 +164,21 @@
     transition: background-color 0.2s ease;
 
     img {
-      width: 16px;
-      height: 20px;
+      width: $size-2;
+      height: calc(#{$size-2} + 4px);
     }
 
     &:hover {
       background-color: $color-bg-footer-lowest;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+    }
+
+    &:active {
+      transform: translateY(1px);
     }
   }
 
@@ -185,13 +194,13 @@
     @include respond-to('tablet') {
       flex-wrap: wrap;
       padding-top: $size-2;
-      gap: 16px;
+      gap: $size-2;
     }
 
     @include respond-to('mobile') {
       flex-direction: column;
       align-items: flex-start;
-      gap: 8px;
+      gap: $size-1;
       padding-top: $size-1;
     }
   }

@@ -56,9 +56,9 @@
   flex: 1;
   min-width: 0;
   background-color: $color-white;
-  border-radius: $size-3;
+  border-radius: $corner-extra-large;
   border: 2.5px solid $color-on-primary;
-  box-shadow: 6px 6px 0px 0px $color-on-primary;
+  box-shadow: $shadow-level-2;
   padding: $size-5;
   display: flex;
   flex-direction: column;
@@ -68,7 +68,7 @@
   @include respond-to('tablet') {
     border-radius: $corner-extra-large;
     border: 2px solid $color-on-primary;
-    box-shadow: 4px 4px 0px 0px $color-on-primary;
+    box-shadow: $shadow-level-1;
     padding: $size-4;
     gap: $size-2;
   }
@@ -76,7 +76,7 @@
   @include respond-to('mobile') {
     border-radius: $corner-extra-large;
     border: 2px solid $color-on-primary;
-    box-shadow: 4px 4px 0px 0px $color-on-primary;
+    box-shadow: $shadow-level-1;
     padding: $size-3;
     gap: $size-2;
   }
@@ -135,7 +135,7 @@
     border-radius: $corner-medium;
     padding: $btn-large-padding;
     cursor: pointer;
-    box-shadow: 2px 2px 0px 0px $color-on-primary;
+    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0px 0px $color-on-primary;
     transition: all 0.2s ease;
 
     @include respond-to('tablet') {
@@ -153,9 +153,14 @@
       background-color: $color-primary-high;
     }
 
+    &:focus-visible {
+      outline: 2px solid $color-tertiary;
+      outline-offset: 2px;
+    }
+
     &:active {
       transform: translateY(1px);
-      box-shadow: 1px 1px 0px 0px $color-on-primary;
+      box-shadow: none;
     }
   }
 
