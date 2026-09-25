@@ -1,8 +1,9 @@
 import './library-page.scss';
 import arrowBackIcon from '../../assets/icons/arrow_back.svg';
+import favoriteIcon from '../../assets/icons/favorite.svg';
 import starIcon from '../../assets/icons/star.svg';
-import categoriesRaw from '../../tasks/mock-data/categories.json';
 import allGamesRaw from '../../tasks/mock-data/all-games-seed.json';
+import categoriesRaw from '../../tasks/mock-data/categories.json';
 
 const gameImageModules = import.meta.glob<{ default: string }>(
   '../../assets/images/games/*-card.jpg',
@@ -29,8 +30,9 @@ export class LibraryPage {
   private element: HTMLElement;
   private games: GameItem[];
   private activeCategory = 'all';
-  private activeSort = 'Popular';
+  private activeSort = 'Rating ↓';
   private currentPage = 1;
+  private itemsPerPage = 6;
   private totalPages = 4;
   private isSortOpen = false;
   private callbacks: LibraryPageCallbacks;
@@ -39,6 +41,7 @@ export class LibraryPage {
     this.callbacks = callbacks;
     this.games = allGamesRaw.data;
     this.element = this.createPageElement();
+    this.renderCards();
     this.setupInteractivity();
   }
 
@@ -54,25 +57,55 @@ export class LibraryPage {
     return '';
   }
 
+  private formatLikes(count: number): string {
+    if (count >= 1000) {
+      return `${(count / 1000).toFixed(1)}K`;
+    }
+    return count.toString();
+  }
+
   private createPageElement(): HTMLElement {
     const page: HTMLElement = document.createElement('div');
     page.className = 'library-page';
 
     const categories = categoriesRaw.data;
-    const sortOptions = ['Popular', 'Rating', 'Newest', 'Price: Low to High'];
+    const sortOptions = ['Rating ↓', 'Rating ↑', 'Popular', 'Newest', 'Price'];
 
     page.innerHTML = `
-      <!-- Filtering & Sorting Header Section -->
+      <!-- Library Header: Title & Subtitle -->
+      <header class="library-header">
+        <h1 class="library-header__title">Game Library</h1>
+        <p class="library-header__subtitle">Browse our collection of casual mini-games</p>
+      </header>
+
+      <!-- Filtering & Sorting Bar -->
       <section class="library-filter-section" aria-label="Game filters and sorting">
-        <div class="library-filter-section__top-row">
-          <h1 class="library-filter-section__title">
-            <span class="library-filter-section__title-pill"></span>
-            All Games
-          </h1>
+        <div class="library-filter-section__controls-row">
+          <div class="library-filter-section__chips-wrapper" tabindex="0" role="region" aria-label="Categories">
+            <div class="library-filter-section__chips-row" role="tablist">
+              ${categories
+                .map(
+                  (cat): string => `
+                <button
+                  type="button"
+                  class="library-filter-section__chip ${
+                    cat.slug === this.activeCategory ? 'library-filter-section__chip--active' : ''
+                  }"
+                  data-category="${cat.slug}"
+                  role="tab"
+                  aria-selected="${cat.slug === this.activeCategory}"
+                >
+                  ${cat.label}
+                </button>
+              `
+                )
+                .join('')}
+            </div>
+          </div>
 
           <div class="library-filter-section__sort-container">
             <button type="button" class="library-filter-section__sort-btn" aria-haspopup="listbox" aria-expanded="false">
-              <span>Sort: <strong class="sort-current-label">${this.activeSort}</strong></span>
+              <span>Sort by: <strong class="sort-current-label">${this.activeSort}</strong></span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
@@ -92,61 +125,11 @@ export class LibraryPage {
             </ul>
           </div>
         </div>
-
-        <div class="library-filter-section__chips-wrapper" tabindex="0" role="region" aria-label="Categories">
-          <div class="library-filter-section__chips-row" role="tablist">
-            ${categories
-              .map(
-                (cat): string => `
-              <button
-                type="button"
-                class="library-filter-section__chip ${
-                  cat.slug === this.activeCategory ? 'library-filter-section__chip--active' : ''
-                }"
-                data-category="${cat.slug}"
-                role="tab"
-                aria-selected="${cat.slug === this.activeCategory}"
-              >
-                ${cat.label}
-              </button>
-            `
-              )
-              .join('')}
-          </div>
-        </div>
       </section>
 
       <!-- Game Cards Grid Section -->
       <section class="library-grid-section" aria-label="Games list">
-        <div class="library-grid-section__grid">
-          ${this.games
-            .map((game): string => {
-              const imgUrl = this.getGameImageUrl(game.slug);
-              return `
-              <article class="library-card" data-slug="${game.slug}">
-                <div class="library-card__thumb-wrap">
-                  <img src="${imgUrl}" alt="${game.name}" class="library-card__image" loading="lazy" />
-                  <span class="library-card__rating">
-                    <img src="${starIcon}" alt="Star" />
-                    ${game.rating}
-                  </span>
-                </div>
-                <div class="library-card__body">
-                  <span class="library-card__category">${game.category}</span>
-                  <h2 class="library-card__title">${game.name}</h2>
-                  <p class="library-card__description">${game.shortDescription}</p>
-                  <div class="library-card__footer">
-                    <span class="library-card__price ${
-                      game.price === 'Free' ? '' : 'library-card__price--paid'
-                    }">${game.price}</span>
-                    <button type="button" class="library-card__details-btn" data-slug="${game.slug}">Details</button>
-                  </div>
-                </div>
-              </article>
-            `;
-            })
-            .join('')}
-        </div>
+        <div class="library-grid-section__grid"></div>
       </section>
 
       <!-- Pagination Section -->
@@ -186,6 +169,70 @@ export class LibraryPage {
     `;
 
     return page;
+  }
+
+  private renderCards(): void {
+    const grid = this.element.querySelector('.library-grid-section__grid');
+    if (!grid) {
+      return;
+    }
+
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const pageGames = this.games.slice(start, start + this.itemsPerPage);
+
+    grid.innerHTML = pageGames
+      .map((game): string => {
+        const imgUrl = this.getGameImageUrl(game.slug);
+        const formattedLikes = this.formatLikes(game.likesCount);
+
+        return `
+        <article class="library-card" data-slug="${game.slug}">
+          <div class="library-card__thumb-wrap">
+            <img src="${imgUrl}" alt="${game.name}" class="library-card__image" loading="lazy" />
+          </div>
+          <div class="library-card__body">
+            <div class="library-card__top-row">
+              <div class="library-card__title-group">
+                <h2 class="library-card__title">${game.name}</h2>
+                <span class="library-card__category">${game.category}</span>
+              </div>
+              <span class="library-card__price ${
+                game.price === 'Free' ? '' : 'library-card__price--paid'
+              }">${game.price}</span>
+            </div>
+
+            <p class="library-card__description">${game.shortDescription}</p>
+
+            <div class="library-card__bottom-row">
+              <div class="library-card__stats">
+                <span class="library-card__rating">
+                  <img src="${starIcon}" alt="Star" />
+                  ${game.rating}
+                </span>
+                <span class="library-card__likes">
+                  <img src="${favoriteIcon}" alt="Likes" />
+                  ${formattedLikes}
+                </span>
+              </div>
+              <button type="button" class="library-card__details-btn" data-slug="${game.slug}">Details</button>
+            </div>
+          </div>
+        </article>
+      `;
+      })
+      .join('');
+
+    // Attach Details button clicks
+    const detailButtons = grid.querySelectorAll<HTMLButtonElement>('.library-card__details-btn');
+    for (const btn of detailButtons) {
+      btn.addEventListener('click', (): void => {
+        const slug = btn.dataset.slug;
+        const game = this.games.find((g): boolean => g.slug === slug);
+        if (game) {
+          this.callbacks.onGameDetailsClick?.(game);
+        }
+      });
+    }
   }
 
   private setupInteractivity(): void {
@@ -294,21 +341,7 @@ export class LibraryPage {
       });
     }
 
-    // 3. Card Details Click -> Game Details Dialog
-    const detailButtons = this.element.querySelectorAll<HTMLButtonElement>(
-      '.library-card__details-btn'
-    );
-    for (const btn of detailButtons) {
-      btn.addEventListener('click', (): void => {
-        const slug = btn.dataset.slug;
-        const game = this.games.find((g): boolean => g.slug === slug);
-        if (game) {
-          this.callbacks.onGameDetailsClick?.(game);
-        }
-      });
-    }
-
-    // 4. Pagination
+    // 3. Pagination
     const prevArrow = this.element.querySelector<HTMLButtonElement>(
       '.library-pagination__arrow-btn--prev'
     );
@@ -331,6 +364,7 @@ export class LibraryPage {
         const p = Number(btn.dataset.page);
         btn.classList.toggle('library-pagination__page-btn--active', p === page);
       }
+      this.renderCards();
     };
 
     for (const btn of pageButtons) {
