@@ -232,7 +232,10 @@
     margin-top: $size-1;
 
     @include respond-to('mobile') {
-      flex-direction: column;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: $size-1;
       width: 100%;
     }
   }
@@ -267,7 +270,8 @@
     }
 
     @include respond-to('mobile') {
-      width: 100%;
+      flex: 1;
+      width: auto;
     }
   }
 
@@ -288,12 +292,14 @@
     gap: $size-1;
     transition: all 0.2s ease;
 
-    svg path {
-      transition: fill 0.2s ease;
+    .fav-heart-icon {
+      stroke: $color-on-primary;
+      fill: none;
+      transition: stroke 0.2s ease;
     }
 
     &:hover {
-      background-color: $color-surface;
+      background-color: $color-surface; // Cream hover per Figma!
     }
 
     &:focus-visible {
@@ -307,17 +313,28 @@
     }
 
     &--active {
-      background-color: $color-secondary;
-      color: $color-like;
+      background-color: $color-white; // White background per Figma!
+      color: $color-on-primary;
 
-      svg path {
-        fill: $color-like;
+      .fav-heart-icon {
+        stroke: $color-like; // Red outline heart per Figma!
+        fill: none;
+      }
+
+      &:hover {
+        background-color: $color-surface; // Cream hover per Figma!
       }
     }
 
     @include respond-to('mobile') {
-      width: 100%;
+      width: $size-6;
+      padding: 0;
       justify-content: center;
+      flex-shrink: 0;
+
+      .fav-btn-text {
+        display: none; // Square icon-only button on mobile per Figma!
+      }
     }
   }
 

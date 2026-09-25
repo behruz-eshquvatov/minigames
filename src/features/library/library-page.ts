@@ -69,7 +69,7 @@ export class LibraryPage {
     page.className = 'library-page';
 
     const categories = categoriesRaw.data;
-    const sortOptions = ['Rating ↓', 'Rating ↑', 'Popular', 'Newest', 'Price'];
+    const sortOptions = ['Rating ↑', 'Rating ↓', 'Name A→Z', 'Name Z→A'];
 
     page.innerHTML = `
       <!-- Library Header: Title & Subtitle -->
@@ -106,7 +106,7 @@ export class LibraryPage {
           <div class="library-filter-section__sort-container">
             <button type="button" class="library-filter-section__sort-btn" aria-haspopup="listbox" aria-expanded="false">
               <span>Sort by: <strong class="sort-current-label">${this.activeSort}</strong></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg class="sort-chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
             </button>
@@ -117,7 +117,10 @@ export class LibraryPage {
                 <li class="library-filter-section__sort-item ${
                   opt === this.activeSort ? 'library-filter-section__sort-item--active' : ''
                 }" role="option" data-sort="${opt}">
-                  ${opt}
+                  <span class="library-filter-section__sort-check">${
+                    opt === this.activeSort ? '✔' : ''
+                  }</span>
+                  <span class="library-filter-section__sort-text">${opt}</span>
                 </li>
               `
                 )
@@ -171,14 +174,45 @@ export class LibraryPage {
     return page;
   }
 
+  private getFilteredAndSortedGames(): GameItem[] {
+    let result = [...this.games];
+    if (this.activeCategory !== 'all') {
+      result = result.filter(
+        (g): boolean => g.category.toLowerCase() === this.activeCategory.toLowerCase()
+      );
+    }
+    switch (this.activeSort) {
+      case 'Rating ↑': {
+        result.sort((a, b): number => a.rating - b.rating);
+        break;
+      }
+      case 'Rating ↓': {
+        result.sort((a, b): number => b.rating - a.rating);
+        break;
+      }
+      case 'Name A→Z': {
+        result.sort((a, b): number => a.name.localeCompare(b.name));
+        break;
+      }
+      case 'Name Z→A': {
+        result.sort((a, b): number => b.name.localeCompare(a.name));
+        break;
+      }
+    }
+    return result;
+  }
+
   private renderCards(): void {
     const grid = this.element.querySelector('.library-grid-section__grid');
     if (!grid) {
       return;
     }
 
+    const filteredGames = this.getFilteredAndSortedGames();
+    this.totalPages = Math.max(1, Math.ceil(filteredGames.length / this.itemsPerPage));
+
     const start = (this.currentPage - 1) * this.itemsPerPage;
-    const pageGames = this.games.slice(start, start + this.itemsPerPage);
+    const pageGames = filteredGames.slice(start, start + this.itemsPerPage);
 
     grid.innerHTML = pageGames
       .map((game): string => {
@@ -236,6 +270,32 @@ export class LibraryPage {
   }
 
   private setupInteractivity(): void {
+    const prevArrow = this.element.querySelector<HTMLButtonElement>(
+      '.library-pagination__arrow-btn--prev'
+    );
+    const nextArrow = this.element.querySelector<HTMLButtonElement>(
+      '.library-pagination__arrow-btn--next'
+    );
+    const pageButtons = this.element.querySelectorAll<HTMLButtonElement>(
+      '.library-pagination__page-btn'
+    );
+
+    const updatePagination = (page: number): void => {
+      this.currentPage = Math.min(page, this.totalPages);
+      if (prevArrow) {
+        prevArrow.disabled = this.currentPage <= 1;
+      }
+      if (nextArrow) {
+        nextArrow.disabled = this.currentPage >= this.totalPages;
+      }
+      for (const btn of pageButtons) {
+        const p = Number(btn.dataset.page);
+        btn.classList.toggle('library-pagination__page-btn--active', p === this.currentPage);
+        btn.style.display = p > this.totalPages ? 'none' : '';
+      }
+      this.renderCards();
+    };
+
     // 1. Filtering Chips
     const chips = this.element.querySelectorAll<HTMLButtonElement>('.library-filter-section__chip');
     for (const chip of chips) {
@@ -250,6 +310,7 @@ export class LibraryPage {
           c.classList.toggle('library-filter-section__chip--active', isActive);
           c.setAttribute('aria-selected', isActive.toString());
         }
+        updatePagination(1);
       });
     }
 
@@ -322,12 +383,18 @@ export class LibraryPage {
             sortLabel.textContent = val;
           }
           for (const s of sortItems) {
-            s.classList.toggle('library-filter-section__sort-item--active', s.dataset.sort === val);
+            const isCur = s.dataset.sort === val;
+            s.classList.toggle('library-filter-section__sort-item--active', isCur);
+            const checkSpan = s.querySelector('.library-filter-section__sort-check');
+            if (checkSpan) {
+              checkSpan.textContent = isCur ? '✔' : '';
+            }
           }
           this.isSortOpen = false;
           sortBtn.classList.remove('library-filter-section__sort-btn--open');
           sortDropdown.classList.remove('library-filter-section__sort-dropdown--open');
           sortBtn.setAttribute('aria-expanded', 'false');
+          updatePagination(1);
         });
       }
 
@@ -342,31 +409,6 @@ export class LibraryPage {
     }
 
     // 3. Pagination
-    const prevArrow = this.element.querySelector<HTMLButtonElement>(
-      '.library-pagination__arrow-btn--prev'
-    );
-    const nextArrow = this.element.querySelector<HTMLButtonElement>(
-      '.library-pagination__arrow-btn--next'
-    );
-    const pageButtons = this.element.querySelectorAll<HTMLButtonElement>(
-      '.library-pagination__page-btn'
-    );
-
-    const updatePagination = (page: number): void => {
-      this.currentPage = page;
-      if (prevArrow) {
-        prevArrow.disabled = this.currentPage === 1;
-      }
-      if (nextArrow) {
-        nextArrow.disabled = this.currentPage === this.totalPages;
-      }
-      for (const btn of pageButtons) {
-        const p = Number(btn.dataset.page);
-        btn.classList.toggle('library-pagination__page-btn--active', p === page);
-      }
-      this.renderCards();
-    };
-
     for (const btn of pageButtons) {
       btn.addEventListener('click', (): void => {
         const p = Number(btn.dataset.page);

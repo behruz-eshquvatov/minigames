@@ -176,7 +176,7 @@
     transition: all 0.2s ease;
 
     &:hover {
-      background-color: $color-surface;
+      background-color: $color-surface; // Cream hover per Figma!
     }
 
     &:focus-visible {
@@ -189,13 +189,13 @@
       box-shadow: none;
     }
 
-    svg {
+    .sort-chevron-icon {
       width: $size-2;
       height: $size-2;
       transition: transform 0.2s ease;
     }
 
-    &--open svg {
+    &--open .sort-chevron-icon {
       transform: rotate(180deg);
     }
   }
@@ -204,15 +204,16 @@
     position: absolute;
     top: calc(100% + #{$size-1});
     right: 0;
-    min-width: 170px;
+    min-width: 180px;
     background-color: $color-white;
     border: 2px solid $color-on-primary;
     border-radius: $corner-medium;
-    box-shadow: $shadow-level-2;
+    box-shadow: calc(#{$size-05}) calc(#{$size-05}) 0px 0px $color-on-primary;
     list-style: none;
     padding: $size-05 0;
     z-index: 50;
     display: none;
+    overflow: hidden;
 
     @include respond-to('tablet') {
       right: auto;
@@ -229,6 +230,9 @@
   }
 
   &__sort-item {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
     padding: $size-1 $size-2;
     font-family: $font-family-base;
     font-size: $font-size-label-large;
@@ -238,13 +242,27 @@
     transition: background-color 0.15s ease;
 
     &:hover {
-      background-color: $color-secondary;
+      background-color: $color-surface; // Cream hover per Figma!
     }
 
     &--active {
-      background-color: $color-primary;
+      background-color: $color-primary; // Yellow #FFD02B per Figma!
       font-weight: $font-weight-bold;
+
+      &:hover {
+        background-color: $color-primary;
+      }
     }
+  }
+
+  &__sort-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $size-2;
+    font-size: $font-size-body-small;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
   }
 }
 
@@ -503,8 +521,14 @@
     }
 
     &:disabled {
-      opacity: 0.35;
+      background-color: $color-white;
+      border-color: #e2e1e8;
       cursor: not-allowed;
+      pointer-events: none;
+
+      img {
+        opacity: 0.3;
+      }
     }
   }
 
