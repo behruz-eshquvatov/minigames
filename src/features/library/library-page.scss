@@ -8,10 +8,10 @@
   flex-direction: column;
   gap: $size-5;
   padding: $size-6 $size-15;
-  max-width: 1920px;
+  max-width: $breakpoint-desktop;
   margin: 0 auto;
 
-  @media (max-width: 1280px) {
+  @include respond-to('laptop') {
     padding: $size-4 $size-6;
   }
 
@@ -115,13 +115,13 @@
     padding: $size-1 $size-2;
     background-color: $color-white;
     color: $color-on-primary;
-    border: 2px solid $color-on-primary;
+    border: $border-width-base solid $color-on-primary;
     border-radius: $corner-full;
     font-family: $font-family-base;
     font-size: $font-size-label-large;
     font-weight: $font-weight-bold;
     cursor: pointer;
-    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0px 0px $color-on-primary;
+    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0 0 $color-on-primary;
     transition: all 0.2s ease;
     user-select: none;
     flex-shrink: 0;
@@ -131,12 +131,12 @@
     }
 
     &:focus-visible {
-      outline: 2px solid $color-tertiary;
-      outline-offset: 2px;
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
     }
 
     &:active {
-      transform: translateY(1px);
+      transform: translateY($press-offset-y);
       box-shadow: none;
     }
 
@@ -166,9 +166,9 @@
     padding: $size-1 $size-2;
     background-color: $color-white;
     color: $color-on-primary;
-    border: 2px solid $color-on-primary;
+    border: $border-width-base solid $color-on-primary;
     border-radius: $corner-full;
-    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0px 0px $color-on-primary;
+    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0 0 $color-on-primary;
     font-family: $font-family-base;
     font-size: $font-size-label-large;
     font-weight: $font-weight-bold;
@@ -180,12 +180,12 @@
     }
 
     &:focus-visible {
-      outline: 2px solid $color-tertiary;
-      outline-offset: 2px;
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
     }
 
     &:active {
-      transform: translateY(1px);
+      transform: translateY($press-offset-y);
       box-shadow: none;
     }
 
@@ -204,11 +204,11 @@
     position: absolute;
     top: calc(100% + #{$size-1});
     right: 0;
-    min-width: 180px;
+    min-width: calc(#{$size-15} + #{$size-7} + #{$size-05});
     background-color: $color-white;
-    border: 2px solid $color-on-primary;
+    border: $border-width-base solid $color-on-primary;
     border-radius: $corner-medium;
-    box-shadow: calc(#{$size-05}) calc(#{$size-05}) 0px 0px $color-on-primary;
+    box-shadow: $size-05 $size-05 0 0 $color-on-primary;
     list-style: none;
     padding: $size-05 0;
     z-index: 50;
@@ -291,17 +291,17 @@
 // Library Horizontal Game Card (Matching Figma Exactly!)
 .library-card {
   background-color: $color-white;
-  border: 2.5px solid $color-on-primary;
+  border: $border-width-thick solid $color-on-primary;
   border-radius: $corner-extra-large;
   box-shadow: $shadow-level-2;
   overflow: hidden;
   display: flex;
   flex-direction: row;
-  height: 220px;
+  height: calc(#{$size-15} + #{$size-10} - #{$size-05} * 5); // 220px card fixed height
   transition: all 0.2s ease;
 
   @include respond-to('tablet') {
-    height: 200px;
+    height: calc(#{$size-15} + #{$size-10}); // 200px tablet card height
     border-radius: $corner-large;
     box-shadow: $shadow-level-1;
   }
@@ -314,7 +314,7 @@
   }
 
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-#{$press-offset-y * 2});
     box-shadow: $shadow-level-3;
   }
 
@@ -327,7 +327,7 @@
 
     @include respond-to('mobile') {
       width: 100%;
-      height: 160px;
+      height: calc(#{$size-15} + #{$size-5}); // 160px mobile thumb height
     }
   }
 
@@ -388,9 +388,9 @@
     font-weight: $font-weight-bold;
     color: $color-on-primary;
     background-color: $color-secondary;
-    border: 1px solid $color-on-primary;
+    border: $border-width-thin solid $color-on-primary;
     border-radius: $corner-full;
-    padding: 2px $size-1;
+    padding: calc(#{$size-05} / 2) $size-1;
     text-transform: capitalize;
   }
 
@@ -456,8 +456,8 @@
     font-size: $font-size-label-large;
     font-weight: $font-weight-bold;
     border-radius: $corner-medium;
-    border: 2px solid $color-on-primary;
-    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0px 0px $color-on-primary;
+    border: $border-width-base solid $color-on-primary;
+    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0 0 $color-on-primary;
     cursor: pointer;
     transition: all 0.2s ease;
 
@@ -466,12 +466,12 @@
     }
 
     &:focus-visible {
-      outline: 2px solid $color-tertiary;
-      outline-offset: 2px;
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
     }
 
     &:active {
-      transform: translateY(1px);
+      transform: translateY($press-offset-y);
       box-shadow: none;
     }
   }
@@ -489,7 +489,7 @@
     width: $size-5;
     height: $size-5;
     border-radius: $corner-full;
-    border: 1.5px solid $color-on-primary;
+    border: $border-width-medium solid $color-on-primary;
     background-color: $color-white;
     display: flex;
     align-items: center;
@@ -512,17 +512,17 @@
     }
 
     &:focus-visible {
-      outline: 2px solid $color-tertiary;
-      outline-offset: 2px;
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
     }
 
     &:active:not(:disabled) {
-      transform: translateY(1px);
+      transform: translateY($press-offset-y);
     }
 
     &:disabled {
       background-color: $color-white;
-      border-color: #e2e1e8;
+      border-color: $color-outline;
       cursor: not-allowed;
       pointer-events: none;
 
@@ -545,7 +545,7 @@
     width: $size-5;
     height: $size-5;
     border-radius: $corner-full;
-    border: 1.5px solid $color-on-primary;
+    border: $border-width-medium solid $color-on-primary;
     background-color: $color-white;
     color: $color-on-primary;
     font-family: $font-family-base;
@@ -562,12 +562,12 @@
     }
 
     &:focus-visible {
-      outline: 2px solid $color-tertiary;
-      outline-offset: 2px;
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
     }
 
     &:active {
-      transform: translateY(1px);
+      transform: translateY($press-offset-y);
     }
 
     &--active {

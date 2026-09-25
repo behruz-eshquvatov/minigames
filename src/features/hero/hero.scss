@@ -5,7 +5,7 @@
 .hero-section {
   position: relative;
   width: 100%;
-  max-width: 1920px;
+  max-width: $breakpoint-desktop;
   margin: 0 auto;
   overflow: hidden;
 
@@ -38,7 +38,7 @@
   &__container {
     position: relative;
     z-index: 3;
-    max-width: 1920px;
+    max-width: $breakpoint-desktop;
     margin: 0 auto;
     padding: $size-14 $size-15; // 112px top/bottom, 120px left/right for Desktops (<= 1920px)
 
@@ -53,11 +53,11 @@
 
   &__card {
     width: 100%;
-    max-width: 640px;
+    max-width: calc(#{$size-15} * 5 + #{$size-5}); // 640px card
     background-color: $color-bg;
     border-radius: $corner-extra-large; // 24px
     padding: $size-6;
-    border: 3px solid $color-on-primary;
+    border: $border-width-heavy solid $color-on-primary;
     box-shadow: $shadow-level-3; // 8px 8px offset shadow
     display: flex;
     flex-direction: column;
@@ -73,7 +73,7 @@
     @include respond-to('mobile') {
       padding: $size-3;
       max-width: 100%;
-      border: 2px solid $color-on-primary;
+      border: $border-width-base solid $color-on-primary;
       box-shadow: $shadow-level-1;
     }
   }

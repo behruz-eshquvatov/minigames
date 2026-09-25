@@ -123,6 +123,18 @@ $btn-medium-padding: 10px 20px;
 $btn-small-padding: 8px 16px;
 $btn-icon-padding: 8px;
 
+// Border Width Tokens
+$border-width-thin: 1px;
+$border-width-medium: 1.5px;
+$border-width-base: 2px;
+$border-width-thick: 2.5px;
+$border-width-heavy: 3px;
+
+// Outline & Interaction Tokens
+$outline-width: 2px;
+$outline-offset: 2px;
+$press-offset-y: 1px;
+
 // Legacy Button Size Aliases
 $button-height-sm: 32px;
 $button-height-md: 44px;

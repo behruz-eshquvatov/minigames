@@ -51,7 +51,7 @@
     align-items: center;
     gap: $size-4;
 
-    @media (max-width: 768px) {
+    @include respond-to('tablet') {
       display: none;
     }
   }
@@ -85,7 +85,7 @@
   }
 
   &__signup-btn {
-    @media (max-width: 480px) {
+    @include respond-to('mobile') {
       display: none !important;
     }
   }
@@ -96,7 +96,7 @@
     height: $size-5;
     padding: $size-1;
     background-color: $color-white;
-    border: 2px solid $color-on-primary;
+    border: $border-width-base solid $color-on-primary;
     border-radius: $corner-medium;
     cursor: pointer;
     z-index: 101;
@@ -107,11 +107,11 @@
     }
 
     &:focus-visible {
-      outline: 2px solid $color-tertiary;
-      outline-offset: 2px;
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
     }
 
-    @media (max-width: 768px) {
+    @include respond-to('tablet') {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -121,15 +121,15 @@
       display: flex;
       flex-direction: column;
       gap: $size-05;
-      width: calc(#{$size-2} + 2px);
+      width: calc(#{$size-2} + #{$border-width-base});
     }
 
     .site-header__burger-line {
       display: block;
       width: 100%;
-      height: 2px;
+      height: $border-width-base;
       background-color: $color-on-primary;
-      border-radius: 2px;
+      border-radius: $border-width-base;
       transition:
         transform 0.3s ease,
         opacity 0.3s ease;
@@ -137,7 +137,7 @@
 
     &--open {
       .site-header__burger-line:nth-child(1) {
-        transform: translateY(calc(#{$size-1} - 2px)) rotate(45deg);
+        transform: translateY(calc(#{$size-1} - #{$border-width-base})) rotate(45deg);
       }
       .site-header__burger-line:nth-child(2) {
         opacity: 0;

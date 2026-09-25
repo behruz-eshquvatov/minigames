@@ -59,7 +59,7 @@
       height: $size-4;
       background-color: $color-primary; // #FFD02B
       border-radius: $corner-extra-large;
-      border: 1.5px solid $color-on-primary;
+      border: $border-width-medium solid $color-on-primary;
 
       @include respond-to('tablet') {
         height: $size-3;
@@ -81,7 +81,7 @@
     width: $size-6;
     height: $size-6;
     border-radius: $corner-full;
-    border: 2px solid $color-on-primary;
+    border: $border-width-base solid $color-on-primary;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -97,13 +97,13 @@
     }
 
     &:active {
-      transform: translateY(2px);
+      transform: translateY($press-offset-y * 2);
       box-shadow: none;
     }
 
     &:focus-visible {
-      outline: 2px solid $color-tertiary;
-      outline-offset: 2px;
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
     }
 
     &--prev {
@@ -157,9 +157,9 @@
 .game-card {
   position: relative;
   flex-shrink: 1;
-  height: 384px;
+  height: calc(#{$size-12} * 4); // 384px carousel height per Figma
   border-radius: $corner-extra-large;
-  border: 3px solid $color-on-primary;
+  border: $border-width-heavy solid $color-on-primary;
   overflow: hidden;
   box-shadow: $shadow-level-1;
   background-color: $color-surface;
@@ -167,82 +167,82 @@
   transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
 
   &:focus-visible {
-    outline: 2px solid $color-tertiary;
-    outline-offset: 2px;
+    outline: $outline-width solid $color-tertiary;
+    outline-offset: $outline-offset;
   }
 
   // Exact Desktop widths at 1920px, fluid scaling down to 1025px so all 5 fit visible
   &--wide {
-    width: 816px;
+    width: calc(
+      #{$size-15} * 6 + #{$size-12} + #{$size-3} + #{$size-1}
+    ); // 816px wide card per Figma
     max-width: 50%;
 
-    @media (min-width: 1920px) {
-      width: 816px;
-      max-width: 816px;
+    @media (min-width: $breakpoint-desktop) {
+      width: calc(#{$size-15} * 6 + #{$size-12} + #{$size-3} + #{$size-1});
+      max-width: calc(#{$size-15} * 6 + #{$size-12} + #{$size-3} + #{$size-1});
     }
   }
 
   &--normal {
-    width: 288px;
+    width: calc(#{$size-12} * 3); // 288px medium card per Figma
     max-width: 17.5%;
 
-    @media (min-width: 1920px) {
-      width: 288px;
-      max-width: 288px;
+    @media (min-width: $breakpoint-desktop) {
+      width: calc(#{$size-12} * 3);
+      max-width: calc(#{$size-12} * 3);
     }
   }
 
   &--narrow {
-    width: 120px;
+    width: $size-15; // 120px narrow card per Figma
     max-width: 7.5%;
 
-    @media (min-width: 1920px) {
-      width: 120px;
-      max-width: 120px;
+    @media (min-width: $breakpoint-desktop) {
+      width: $size-15;
+      max-width: $size-15;
     }
   }
 
-  // Tablet & laptop viewports (<= 768px) - exactly 3 resizable cards (1st and 5th hidden)
-  @media (max-width: 768px) {
+  // Tablet viewports (<= 768px) - exactly 3 resizable cards (1st and 5th hidden)
+  @include respond-to('tablet') {
     &:nth-child(1),
     &:nth-child(5) {
       display: none !important;
     }
 
     &--wide {
-      width: 448px;
+      width: calc(#{$size-14} * 4); // 448px tablet wide card
       max-width: 60%;
     }
 
     &--normal,
     &--narrow {
-      width: 104px;
+      width: $size-13; // 104px tablet narrow card
       max-width: 20%;
     }
-  }
 
-  @include respond-to('tablet') {
-    height: 280px;
-    border: 2px solid $color-on-primary;
+    height: calc(#{$size-15} * 2 + #{$size-5}); // 280px tablet card height
+    border: $border-width-base solid $color-on-primary;
     border-radius: $corner-large;
     box-shadow: $shadow-level-1;
   }
 
   // Mobile overrides (<= 576px)
   @include respond-to('mobile') {
-    height: 200px;
-    border: 2px solid $color-on-primary;
+    height: calc(#{$size-15} + #{$size-10}); // 200px mobile card height
+    border: $border-width-base solid $color-on-primary;
     border-radius: $corner-large;
     box-shadow: $shadow-level-1;
 
     &--wide {
-      width: 218px;
+      width: calc(#{$size-15} + #{$size-12} + #{$size-05});
       max-width: 60%;
     }
 
     &--normal,
     &--narrow {
-      width: 68px;
+      width: calc(#{$size-8} + #{$size-05});
       max-width: 20%;
     }
   }
@@ -322,7 +322,7 @@
 }
 
 // Media query check to ensure any card dynamically rendered < 288px hides overlay
-@media (max-width: 768px) {
+@include respond-to('tablet') {
   .game-card {
     &--normal,
     &--narrow {
