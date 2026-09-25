@@ -116,24 +116,30 @@
       right: $size-2;
       width: $size-5;
       height: $size-5;
-      background-color: rgba(36, 33, 69, 0.8);
+      background-color: $color-white;
       border-radius: $corner-full;
-      border: 1.5px solid $color-white;
+      border: 2px solid $color-on-primary;
+      box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0px 0px $color-on-primary;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      color: $color-white;
-      transition: background-color 0.2s ease;
+      color: $color-on-primary;
+      transition: all 0.2s ease;
       z-index: 2;
 
       &:hover {
-        background-color: $color-on-primary;
+        background-color: $color-surface; // Cream hover per Figma!
       }
 
       &:focus-visible {
-        outline: 2px solid $color-primary;
+        outline: 2px solid $color-tertiary;
         outline-offset: 2px;
+      }
+
+      &:active {
+        transform: translateY(1px);
+        box-shadow: none;
       }
 
       svg {
@@ -251,7 +257,7 @@
     font-weight: $font-weight-bold;
     border-radius: $corner-medium;
     border: 2px solid $color-on-primary;
-    box-shadow: $shadow-level-1;
+    box-shadow: calc(#{$size-05}) calc(#{$size-05}) 0px 0px $color-on-primary;
     cursor: pointer;
     transition: all 0.2s ease;
 
@@ -405,12 +411,12 @@
 
   &__comment-form {
     display: flex;
-    flex-direction: column;
+    align-items: flex-end;
     gap: $size-1;
   }
 
   &__textarea {
-    width: 100%;
+    flex: 1;
     min-height: $size-5;
     max-height: $size-11; // Max 88px per spec
     padding: $size-1 $size-2;
@@ -428,7 +434,7 @@
       box-shadow 0.2s ease;
 
     &:focus {
-      border-color: $color-tertiary;
+      border-color: $color-on-primary;
       box-shadow: 0 0 0 2px rgba(58, 46, 191, 0.2);
     }
 
@@ -438,31 +444,43 @@
   }
 
   &__submit-comment-btn {
-    align-self: flex-end;
-    padding: $size-05 $size-2;
-    background-color: $color-primary;
-    color: $color-on-primary;
-    font-family: $font-family-base;
-    font-size: $font-size-label-medium;
-    font-weight: $font-weight-bold;
-    border-radius: $corner-small;
-    border: 1.5px solid $color-on-primary;
-    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0px 0px $color-on-primary;
-    cursor: pointer;
+    width: $size-5;
+    height: $size-5;
+    border-radius: $corner-medium;
+    border: none;
+    background-color: #f0f0f3;
+    color: #c4c3cf;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: not-allowed;
+    flex-shrink: 0;
     transition: all 0.2s ease;
 
-    &:hover {
-      background-color: $color-primary-high;
+    svg {
+      width: $size-2;
+      height: $size-2;
+      stroke: currentColor;
+      fill: none;
     }
 
-    &:focus-visible {
-      outline: 2px solid $color-tertiary;
-      outline-offset: 2px;
-    }
+    &:not(:disabled) {
+      background-color: $color-on-primary;
+      color: $color-white;
+      cursor: pointer;
 
-    &:active {
-      transform: translateY(1px);
-      box-shadow: none;
+      &:hover {
+        background-color: $color-tertiary; // #3A2EBF hover per Figma!
+      }
+
+      &:focus-visible {
+        outline: 2px solid $color-tertiary;
+        outline-offset: 2px;
+      }
+
+      &:active {
+        transform: translateY(1px);
+      }
     }
   }
 
@@ -517,22 +535,26 @@
     gap: $size-05;
     padding: $size-05 $size-1;
     background-color: transparent;
-    border: 1px solid $color-outline;
+    border: none;
     border-radius: $corner-full;
-    font-size: $font-size-label-medium;
-    font-weight: $font-weight-semibold;
-    color: $color-on-bg-low;
+    font-size: $font-size-body-small;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
 
     svg {
       width: $size-2;
       height: $size-2;
+      stroke: $color-on-primary;
+      fill: none;
+      transition: stroke 0.2s ease;
     }
 
     &:hover {
-      background-color: $color-secondary;
-      color: $color-on-primary;
+      background-color: $color-surface; // Cream hover per Figma!
     }
 
     &:focus-visible {
@@ -541,13 +563,15 @@
     }
 
     &--active {
-      background-color: $color-secondary;
-      border-color: $color-like;
-      color: $color-like;
+      color: $color-like; // Red text per Figma!
 
-      svg path {
-        fill: $color-like;
-        stroke: $color-like;
+      svg {
+        stroke: $color-like; // Red outline heart per Figma!
+        fill: none;
+      }
+
+      &:hover {
+        background-color: $color-surface; // Cream hover per Figma!
       }
     }
   }

@@ -456,7 +456,7 @@
     font-size: $font-size-label-large;
     font-weight: $font-weight-bold;
     border-radius: $corner-medium;
-    border: 1.5px solid $color-on-primary;
+    border: 2px solid $color-on-primary;
     box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0px 0px $color-on-primary;
     cursor: pointer;
     transition: all 0.2s ease;

@@ -205,11 +205,21 @@ export class GameDetailsDialog {
               <div class="game-details-dialog__comment-form">
                 <textarea
                   class="game-details-dialog__textarea"
-                  placeholder="Leave a comment..."
+                  placeholder="Write a comment..."
                   rows="1"
                   aria-label="Write a comment"
                 ></textarea>
-                <button type="button" class="game-details-dialog__submit-comment-btn">Submit</button>
+                <button
+                  type="button"
+                  class="game-details-dialog__submit-comment-btn"
+                  aria-label="Send comment"
+                  disabled
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </button>
               </div>
 
               <div class="game-details-dialog__comments-list">
@@ -305,10 +315,13 @@ export class GameDetailsDialog {
       });
     }
 
-    // Textarea auto-grow up to 88px
+    // Textarea auto-grow up to 88px & Send button enablement
     this.textareaElement =
       this.backdropElement.querySelector<HTMLTextAreaElement>('.game-details-dialog__textarea') ??
       undefined;
+    const submitBtn = this.backdropElement.querySelector<HTMLButtonElement>(
+      '.game-details-dialog__submit-comment-btn'
+    );
 
     if (this.textareaElement) {
       this.textareaElement.addEventListener('input', (): void => {
@@ -318,6 +331,58 @@ export class GameDetailsDialog {
         this.textareaElement.style.height = 'auto';
         const newHeight: number = Math.min(this.textareaElement.scrollHeight, 88);
         this.textareaElement.style.height = `${newHeight}px`;
+
+        if (submitBtn) {
+          submitBtn.disabled = this.textareaElement.value.trim().length === 0;
+        }
+      });
+    }
+
+    if (submitBtn) {
+      submitBtn.addEventListener('click', (): void => {
+        if (!this.textareaElement || this.textareaElement.value.trim().length === 0) {
+          return;
+        }
+        const commentText = this.textareaElement.value.trim();
+        const commentsList = this.backdropElement.querySelector(
+          '.game-details-dialog__comments-list'
+        );
+        if (commentsList) {
+          const newCommentArticle = document.createElement('article');
+          newCommentArticle.className = 'game-details-dialog__comment-item';
+          const newCommentId = `comment-${Date.now()}`;
+          this.commentLikes.set(newCommentId, { count: 0, active: false });
+          newCommentArticle.innerHTML = `
+            <div class="game-details-dialog__comment-header">
+              <span class="game-details-dialog__comment-author">You</span>
+              <time class="game-details-dialog__comment-date">Just now</time>
+            </div>
+            <p class="game-details-dialog__comment-text">${commentText}</p>
+            <div class="game-details-dialog__comment-footer">
+              <button
+                type="button"
+                class="game-details-dialog__comment-like-btn"
+                data-comment-id="${newCommentId}"
+                aria-label="Like comment by You"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="like-count">0</span>
+              </button>
+            </div>
+          `;
+          const likeBtn = newCommentArticle.querySelector<HTMLButtonElement>(
+            '.game-details-dialog__comment-like-btn'
+          );
+          if (likeBtn) {
+            this.attachLikeListener(likeBtn, newCommentId);
+          }
+          commentsList.prepend(newCommentArticle);
+        }
+        this.textareaElement.value = '';
+        this.textareaElement.style.height = 'auto';
+        submitBtn.disabled = true;
       });
     }
 
@@ -327,22 +392,25 @@ export class GameDetailsDialog {
     );
     for (const button of likeButtons) {
       const commentId = button.dataset.commentId;
-      if (!commentId) {
-        continue;
+      if (commentId) {
+        this.attachLikeListener(button, commentId);
       }
-      button.addEventListener('click', (): void => {
-        const state = this.commentLikes.get(commentId);
-        if (!state) {
-          return;
-        }
-        state.active = !state.active;
-        state.count = state.active ? state.count + 1 : state.count - 1;
-        button.classList.toggle('game-details-dialog__comment-like-btn--active', state.active);
-        const countSpan = button.querySelector('.like-count');
-        if (countSpan) {
-          countSpan.textContent = state.count.toString();
-        }
-      });
     }
+  }
+
+  private attachLikeListener(button: HTMLButtonElement, commentId: string): void {
+    button.addEventListener('click', (): void => {
+      const state = this.commentLikes.get(commentId);
+      if (!state) {
+        return;
+      }
+      state.active = !state.active;
+      state.count = state.active ? state.count + 1 : state.count - 1;
+      button.classList.toggle('game-details-dialog__comment-like-btn--active', state.active);
+      const countSpan = button.querySelector('.like-count');
+      if (countSpan) {
+        countSpan.textContent = state.count.toString();
+      }
+    });
   }
 }
