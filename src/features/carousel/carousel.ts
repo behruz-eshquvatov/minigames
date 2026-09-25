@@ -109,6 +109,8 @@ export class Carousel {
 
   private startX = 0;
   private isSwiping = false;
+  private hasSwiped = false;
+  private isAnimating = false;
 
   public constructor(callbacks: CarouselCallbacks = {}) {
     this.callbacks = callbacks;
@@ -174,88 +176,160 @@ export class Carousel {
     );
   }
 
-  private renderTrack(): void {
-    const track = this.element.querySelector('.carousel-section__track');
-    if (!track) {
-      return;
-    }
+  private createCardElement(
+    game: FeaturedGame,
+    widthType: 'narrow' | 'normal' | 'wide'
+  ): HTMLElement {
+    const card = document.createElement('div');
+    card.className = `game-card game-card--${widthType}`;
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', game.name);
+    card.dataset.slug = game.slug;
 
-    const visibleItems = this.getVisibleGames();
-
-    track.innerHTML = visibleItems
-      .map(
-        (item): string => `
-      <div class="game-card game-card--${item.widthType}" tabindex="0" role="button" aria-label="${item.game.name}" data-slug="${item.game.slug}">
-        <img src="${item.game.cardImage}" alt="${item.game.name}" class="game-card__image" />
-        <div class="game-card__overlay">
-          <div class="game-card__info">
-            <h3 class="game-card__title">${item.game.name}</h3>
-            <div class="game-card__meta">
-              <span class="game-card__rating">
-                <img src="${starIcon}" alt="Star" class="game-card__star-icon" width="20" height="20" />
-                ${item.game.rating}
-              </span>
-              <span class="game-card__likes">
-                <img src="${favoriteIcon}" alt="Likes" class="game-card__like-icon" width="20" height="20" />
-                ${item.game.likesFormatted}
-              </span>
-            </div>
+    card.innerHTML = `
+      <img src="${game.cardImage}" alt="${game.name}" class="game-card__image" />
+      <div class="game-card__overlay">
+        <div class="game-card__info">
+          <h3 class="game-card__title">${game.name}</h3>
+          <div class="game-card__meta">
+            <span class="game-card__rating">
+              <img src="${starIcon}" alt="Star" class="game-card__star-icon" width="20" height="20" />
+              ${game.rating}
+            </span>
+            <span class="game-card__likes">
+              <img src="${favoriteIcon}" alt="Likes" class="game-card__like-icon" width="20" height="20" />
+              ${game.likesFormatted}
+            </span>
           </div>
         </div>
       </div>
-    `
-      )
-      .join('');
+    `;
 
-    // Attach card click handlers (opens Game Details dialog)
-    const cards = track.querySelectorAll<HTMLElement>('.game-card');
-    for (const card of cards) {
-      const slug = card.dataset.slug;
-      const game = this.games.find((g): boolean => g.slug === slug);
-      if (game) {
-        card.addEventListener('click', (): void => {
-          this.callbacks.onGameClick?.(game);
-        });
-        card.addEventListener('keydown', (e: KeyboardEvent): void => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            this.callbacks.onGameClick?.(game);
-          }
-        });
-      }
-    }
-
-    this.checkCardWidthThresholds();
+    this.attachCardEvents(card, game);
+    return card;
   }
 
-  // Cards with rendered width < 288px hide the overlay per acceptance criteria
-  private checkCardWidthThresholds(): void {
-    const track = this.element.querySelector('.carousel-section__track');
+  private attachCardEvents(card: HTMLElement, game: FeaturedGame): void {
+    card.addEventListener('click', (): void => {
+      if (this.hasSwiped || this.isAnimating) {
+        return;
+      }
+      this.callbacks.onGameClick?.(game);
+    });
+
+    card.addEventListener('keydown', (e: KeyboardEvent): void => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (this.isAnimating) {
+          return;
+        }
+        this.callbacks.onGameClick?.(game);
+      }
+    });
+  }
+
+  private renderTrack(): void {
+    const track = this.element.querySelector<HTMLElement>('.carousel-section__track');
     if (!track) {
       return;
     }
-    const cards = track.querySelectorAll<HTMLElement>('.game-card');
-    for (const card of cards) {
-      const overlay = card.querySelector<HTMLElement>('.game-card__overlay');
-      if (overlay) {
-        const width = card.getBoundingClientRect().width;
-        if (width > 0 && width < 288) {
-          overlay.style.display = 'none';
-        } else if (width >= 288) {
-          overlay.style.display = '';
-        }
-      }
+
+    track.innerHTML = '';
+    const visibleItems = this.getVisibleGames();
+    for (const item of visibleItems) {
+      track.append(this.createCardElement(item.game, item.widthType));
     }
   }
 
   public next(): void {
-    this.centerIndex = (this.centerIndex + 1) % this.games.length;
-    this.renderTrack();
+    if (this.isAnimating) {
+      return;
+    }
+    this.slide('next');
   }
 
   public prev(): void {
-    this.centerIndex = (this.centerIndex - 1 + this.games.length) % this.games.length;
-    this.renderTrack();
+    if (this.isAnimating) {
+      return;
+    }
+    this.slide('prev');
+  }
+
+  private slide(direction: 'next' | 'prev'): void {
+    const track = this.element.querySelector<HTMLElement>('.carousel-section__track');
+    if (!track || this.isAnimating) {
+      return;
+    }
+
+    const cards = [...track.querySelectorAll<HTMLElement>('.game-card')];
+    if (cards.length !== 5) {
+      this.centerIndex =
+        direction === 'next'
+          ? (this.centerIndex + 1) % this.games.length
+          : (this.centerIndex - 1 + this.games.length) % this.games.length;
+      this.renderTrack();
+      return;
+    }
+
+    this.isAnimating = true;
+    const total = this.games.length;
+
+    if (direction === 'next') {
+      const nextGame = this.games[(this.centerIndex + 3 + total * 10) % total];
+      const incomingCard = this.createCardElement(nextGame, 'narrow');
+      incomingCard.classList.add('game-card--collapsed', 'game-card--collapse-right');
+      track.append(incomingCard);
+
+      requestAnimationFrame((): void => {
+        requestAnimationFrame((): void => {
+          // Old leftmost card collapses
+          cards[0].classList.add('game-card--collapsed', 'game-card--collapse-left');
+
+          // Transition intermediate card classes
+          cards[1].className = 'game-card game-card--narrow';
+          cards[2].className = 'game-card game-card--normal';
+          cards[3].className = 'game-card game-card--wide';
+          cards[4].className = 'game-card game-card--normal';
+
+          // Incoming card expands
+          incomingCard.classList.remove('game-card--collapsed', 'game-card--collapse-right');
+
+          setTimeout((): void => {
+            cards[0].remove();
+            this.centerIndex = (this.centerIndex + 1) % total;
+            this.isAnimating = false;
+          }, 420);
+        });
+      });
+    } else {
+      const prevGame = this.games[(this.centerIndex - 3 + total * 10) % total];
+      const incomingCard = this.createCardElement(prevGame, 'narrow');
+      incomingCard.classList.add('game-card--collapsed', 'game-card--collapse-left');
+      track.prepend(incomingCard);
+
+      requestAnimationFrame((): void => {
+        requestAnimationFrame((): void => {
+          // Old rightmost card collapses
+          cards[4].classList.add('game-card--collapsed', 'game-card--collapse-right');
+
+          // Transition intermediate card classes
+          cards[3].className = 'game-card game-card--narrow';
+          cards[2].className = 'game-card game-card--normal';
+          cards[1].className = 'game-card game-card--wide';
+          cards[0].className = 'game-card game-card--normal';
+
+          // Incoming card expands
+          incomingCard.classList.remove('game-card--collapsed', 'game-card--collapse-left');
+
+          setTimeout((): void => {
+            cards[4].remove();
+            this.centerIndex = (this.centerIndex - 1 + total) % total;
+            this.isAnimating = false;
+          }, 420);
+        });
+      });
+    }
   }
 
   private startAutoplay(): void {
@@ -307,6 +381,7 @@ export class Carousel {
       trackWrapper.addEventListener('pointerdown', (e: PointerEvent): void => {
         this.startX = e.clientX;
         this.isSwiping = true;
+        this.hasSwiped = false;
         this.stopAutoplay();
       });
 
@@ -318,6 +393,7 @@ export class Carousel {
         const deltaX = e.clientX - this.startX;
 
         if (Math.abs(deltaX) > 40) {
+          this.hasSwiped = true;
           if (deltaX < 0) {
             this.next();
           } else {
@@ -344,10 +420,6 @@ export class Carousel {
         this.startAutoplay();
       });
     }
-
-    window.addEventListener('resize', (): void => {
-      this.checkCardWidthThresholds();
-    });
   }
 
   public destroy(): void {
