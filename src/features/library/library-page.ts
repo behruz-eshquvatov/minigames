@@ -10,6 +10,10 @@ const gameImageModules = import.meta.glob<{ default: string }>(
   { eager: true }
 );
 
+const DEFAULT_ITEMS_PER_PAGE = 6;
+const DEFAULT_TOTAL_PAGES = 4;
+const DRAG_SCROLL_MULTIPLIER = 1.5;
+
 export interface GameItem {
   slug: string;
   name: string;
@@ -32,8 +36,8 @@ export class LibraryPage {
   private activeCategory = 'all';
   private activeSort = 'Rating ↓';
   private currentPage = 1;
-  private itemsPerPage = 6;
-  private totalPages = 4;
+  private itemsPerPage = DEFAULT_ITEMS_PER_PAGE;
+  private totalPages = DEFAULT_TOTAL_PAGES;
   private isSortOpen = false;
   private callbacks: LibraryPageCallbacks;
 
@@ -343,7 +347,7 @@ export class LibraryPage {
         }
         e.preventDefault();
         const x = e.pageX - chipsWrapper.offsetLeft;
-        const walk = (x - startX) * 1.5;
+        const walk = (x - startX) * DRAG_SCROLL_MULTIPLIER;
         chipsWrapper.scrollLeft = scrollLeft - walk;
       });
     }

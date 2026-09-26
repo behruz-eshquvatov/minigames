@@ -5,6 +5,13 @@ import favoriteIcon from '../../assets/icons/favorite.svg';
 import gameDataRaw from '../../tasks/mock-data/game-tukoni-forest-keepers.json';
 import commentsDataRaw from '../../tasks/mock-data/comments-tukoni-forest-keepers.json';
 
+const MS_PER_SECOND = 1000;
+const SECONDS_PER_MINUTE = 60;
+const MINUTES_PER_HOUR = 60;
+const HOURS_PER_DAY = 24;
+const DAYS_PER_WEEK = 7;
+const MS_PER_HOUR = MS_PER_SECOND * SECONDS_PER_MINUTE * MINUTES_PER_HOUR;
+
 interface SpecInfo {
   genre: string;
   players: string;
@@ -122,21 +129,21 @@ export class GameDetailsDialog {
       return map[dateString];
     }
     const diffMs = Date.now() - new Date(dateString).getTime();
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffHours = Math.floor(diffMs / MS_PER_HOUR);
     if (diffHours < 1) {
       return 'Just now';
     }
-    if (diffHours < 24) {
+    if (diffHours < HOURS_PER_DAY) {
       return `${diffHours} hours ago`;
     }
-    const diffDays = Math.floor(diffHours / 24);
+    const diffDays = Math.floor(diffHours / HOURS_PER_DAY);
     if (diffDays === 1) {
       return '1 day ago';
     }
-    if (diffDays < 7) {
+    if (diffDays < DAYS_PER_WEEK) {
       return `${diffDays} days ago`;
     }
-    const diffWeeks = Math.floor(diffDays / 7);
+    const diffWeeks = Math.floor(diffDays / DAYS_PER_WEEK);
     return diffWeeks === 1 ? '1 week ago' : `${diffWeeks} weeks ago`;
   }
 

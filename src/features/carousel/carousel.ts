@@ -13,6 +13,11 @@ import tinyGladeImg from '../../assets/images/games/tiny-glade-card.jpg';
 import vacationCafeImg from '../../assets/images/games/vacation-cafe-simulator-card.jpg';
 import winterBurrowImg from '../../assets/images/games/winter-burrow-card.jpg';
 
+const VISIBLE_CARDS_COUNT = 5;
+const CAROUSEL_ANIMATION_MS = 420;
+const AUTOPLAY_INTERVAL_MS = 4000;
+const SWIPE_THRESHOLD_PX = 40;
+
 export interface FeaturedGame {
   slug: string;
   name: string;
@@ -263,7 +268,7 @@ export class Carousel {
     }
 
     const cards = [...track.querySelectorAll<HTMLElement>('.game-card')];
-    if (cards.length !== 5) {
+    if (cards.length !== VISIBLE_CARDS_COUNT) {
       this.centerIndex =
         direction === 'next'
           ? (this.centerIndex + 1) % this.games.length
@@ -299,7 +304,7 @@ export class Carousel {
             cards[0].remove();
             this.centerIndex = (this.centerIndex + 1) % total;
             this.isAnimating = false;
-          }, 420);
+          }, CAROUSEL_ANIMATION_MS);
         });
       });
     } else {
@@ -326,7 +331,7 @@ export class Carousel {
             cards[4].remove();
             this.centerIndex = (this.centerIndex - 1 + total) % total;
             this.isAnimating = false;
-          }, 420);
+          }, CAROUSEL_ANIMATION_MS);
         });
       });
     }
@@ -336,7 +341,7 @@ export class Carousel {
     this.stopAutoplay();
     this.autoplayTimer = setInterval((): void => {
       this.next();
-    }, 4000);
+    }, AUTOPLAY_INTERVAL_MS);
   }
 
   private stopAutoplay(): void {
@@ -392,7 +397,7 @@ export class Carousel {
         this.isSwiping = false;
         const deltaX = e.clientX - this.startX;
 
-        if (Math.abs(deltaX) > 40) {
+        if (Math.abs(deltaX) > SWIPE_THRESHOLD_PX) {
           this.hasSwiped = true;
           if (deltaX < 0) {
             this.next();
