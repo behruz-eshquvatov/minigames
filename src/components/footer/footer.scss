@@ -10,7 +10,7 @@
 
   &__container {
     width: 100%;
-    max-width: 1920px;
+    max-width: $breakpoint-desktop;
     margin: 0 auto;
     padding: $size-5 $size-15 $size-5 $size-15;
 
@@ -43,7 +43,7 @@
   }
 
   &__brand {
-    max-width: 400px;
+    max-width: calc(#{$size-15} * 3 + #{$size-5}); // 400px brand text max-width
     display: flex;
     flex-direction: column;
     gap: $size-3;
@@ -165,7 +165,7 @@
 
     img {
       width: $size-2;
-      height: calc(#{$size-2} + 4px);
+      height: calc(#{$size-2} + #{$size-05});
     }
 
     &:hover {
@@ -173,17 +173,17 @@
     }
 
     &:focus-visible {
-      outline: 2px solid $color-primary;
-      outline-offset: 2px;
+      outline: $outline-width solid $color-primary;
+      outline-offset: $outline-offset;
     }
 
     &:active {
-      transform: translateY(1px);
+      transform: translateY($press-offset-y);
     }
   }
 
   &__bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: $border-width-thin solid rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     justify-content: space-between;

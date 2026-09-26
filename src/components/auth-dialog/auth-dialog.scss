@@ -9,7 +9,7 @@
   width: 100vw;
   height: 100vh;
   background-color: rgba(30, 27, 58, 0.65);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur($size-05);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -24,11 +24,11 @@
 }
 
 .auth-dialog {
-  width: 420px;
+  width: calc(#{$size-15} * 3 + #{$size-7} + #{$size-05}); // 420px width per Figma
   max-width: calc(100vw - #{$size-4});
   background-color: $color-bg;
   border-radius: $corner-extra-large;
-  border: 3px solid $color-on-primary;
+  border: $border-width-heavy solid $color-on-primary;
   box-shadow: $shadow-level-2;
   padding: $size-4;
   display: flex;
@@ -54,7 +54,7 @@
   }
 
   @include respond-to('mobile') {
-    padding: calc(#{$size-2} + 4px);
+    padding: calc(#{$size-2} + #{$size-05});
     border-radius: $corner-large;
     box-shadow: $shadow-level-1;
   }
@@ -62,14 +62,14 @@
   &__switcher {
     display: flex;
     background-color: $color-white;
-    border: 2.5px solid $color-on-primary;
+    border: $border-width-thick solid $color-on-primary;
     border-radius: $corner-medium;
   }
 
   &__switcher-btn {
     flex: 1;
     padding: $btn-large-padding;
-    margin: -2px;
+    margin: -#{$border-width-base};
     border-radius: $corner-medium;
     font-family: $font-family-base;
     font-weight: $font-weight-bold;
@@ -147,9 +147,9 @@
     font-family: $font-family-base;
     font-weight: $font-weight-bold;
     font-size: $font-size-body-medium;
-    border: 2px solid $color-on-primary;
+    border: $border-width-base solid $color-on-primary;
     border-radius: $corner-medium;
-    box-shadow: 0px $size-05 0px 0px $color-on-primary;
+    box-shadow: 0 $size-05 0 0 $color-on-primary;
     padding: $size-2;
     margin-top: $size-1;
     cursor: pointer;
@@ -160,12 +160,12 @@
     }
 
     &:focus-visible {
-      outline: 2px solid $color-tertiary;
-      outline-offset: 2px;
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
     }
 
     &:active {
-      transform: translateY(1px);
+      transform: translateY($press-offset-y);
       box-shadow: none;
     }
   }
@@ -186,17 +186,17 @@
     display: flex;
     align-items: center;
     background-color: $color-white;
-    border: 2px solid $color-on-primary;
+    border: $border-width-base solid $color-on-primary;
     border-radius: $corner-small;
     padding: $corner-medium $size-2;
-    gap: calc(#{$size-1} + 2px);
+    gap: calc(#{$size-1} + #{$border-width-base});
     transition:
       border-color 0.2s ease,
       box-shadow 0.2s ease;
 
     &:focus-within {
       border-color: $color-tertiary;
-      box-shadow: 0 0 0 2px rgba(58, 46, 191, 0.2);
+      box-shadow: 0 0 0 $border-width-base rgba(58, 46, 191, 0.2);
     }
   }
 
@@ -241,7 +241,7 @@
 
   &__line {
     flex: 1;
-    height: 1px;
+    height: $border-width-thin;
     background-color: $color-on-primary;
     opacity: 0.2;
   }
@@ -260,7 +260,7 @@
   font-family: $font-family-base;
   font-weight: $font-weight-bold;
   font-size: $font-size-label-extra-large;
-  border: 2px solid $color-on-primary;
+  border: $border-width-base solid $color-on-primary;
   border-radius: $corner-medium;
   padding: $btn-large-padding;
   display: flex;
@@ -275,11 +275,11 @@
   }
 
   &:focus-visible {
-    outline: 2px solid $color-tertiary;
-    outline-offset: 2px;
+    outline: $outline-width solid $color-tertiary;
+    outline-offset: $outline-offset;
   }
 
   &:active {
-    transform: translateY(1px);
+    transform: translateY($press-offset-y);
   }
 }

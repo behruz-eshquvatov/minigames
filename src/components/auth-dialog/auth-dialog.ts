@@ -1,5 +1,8 @@
 import './auth-dialog.scss';
 
+const DIALOG_CLOSE_ANIMATION_MS = 250;
+const TAB_TRANSITION_MS = 150;
+
 export type AuthMode = 'login' | 'register';
 
 export interface AuthDialogOptions {
@@ -59,7 +62,7 @@ export class AuthDialog {
         this.element.remove();
       }
       this.isOpen = false;
-    }, 250);
+    }, DIALOG_CLOSE_ANIMATION_MS);
 
     document.removeEventListener('keydown', this.handleKeyDown);
   }
@@ -95,7 +98,7 @@ export class AuthDialog {
         if (newFormContainer) {
           newFormContainer.classList.remove('auth-dialog__form-container--transitioning');
         }
-      }, 150);
+      }, TAB_TRANSITION_MS);
     } else {
       this.renderContent();
     }

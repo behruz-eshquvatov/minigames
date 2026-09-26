@@ -1,0 +1,619 @@
+@use '../../styles/tokens' as *;
+@use '../../styles/breakpoints' as *;
+@use '../../styles/mixins' as *;
+
+.game-details-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(30, 27, 58, 0.65);
+  backdrop-filter: blur($size-05);
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $size-2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+
+  &--active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @include respond-to('mobile') {
+    padding: 0;
+    align-items: flex-end;
+  }
+}
+
+.game-details-dialog {
+  width: calc(#{$size-15} * 5); // 600px desktop modal dialog width per Figma
+  max-width: calc(100vw - #{$size-4});
+  max-height: calc(100vh - #{$size-6});
+  background-color: $color-bg;
+  border-radius: $corner-extra-large;
+  border: $border-width-heavy solid $color-on-primary;
+  box-shadow: $shadow-level-2;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.95);
+  opacity: 0;
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.25s ease;
+
+  &--active {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  @include respond-to('mobile') {
+    width: 100%;
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: $corner-large $corner-large 0 0;
+    border-bottom: none;
+  }
+
+  &__content {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: thin;
+    scrollbar-color: $color-on-bg-low transparent;
+
+    &::-webkit-scrollbar {
+      width: $size-1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $color-on-bg-low;
+      border-radius: $corner-full;
+    }
+  }
+
+  // Hero Section
+  &__hero {
+    position: relative;
+    width: 100%;
+    height: calc(#{$size-15} * 2); // 240px hero image height per Figma
+    flex-shrink: 0;
+    overflow: hidden;
+
+    @include respond-to('mobile') {
+      height: calc(#{$size-15} + #{$size-8}); // 180px mobile hero height
+    }
+
+    &-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    &-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(0, 0, 0, 0) 40%,
+        rgba(0, 0, 0, 0.6) 100%
+      );
+    }
+
+    &-close-btn {
+      position: absolute;
+      top: $size-2;
+      right: $size-2;
+      width: $size-5;
+      height: $size-5;
+      background-color: $color-white;
+      border-radius: $corner-full;
+      border: $border-width-base solid $color-on-primary;
+      box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0 0 $color-on-primary;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: $color-on-primary;
+      transition: all 0.2s ease;
+      z-index: 2;
+
+      &:hover {
+        background-color: $color-surface; // Cream hover per Figma!
+      }
+
+      &:focus-visible {
+        outline: $outline-width solid $color-tertiary;
+        outline-offset: $outline-offset;
+      }
+
+      &:active {
+        transform: translateY($press-offset-y);
+        box-shadow: none;
+      }
+
+      svg {
+        width: $size-2;
+        height: $size-2;
+        stroke: currentColor;
+      }
+    }
+  }
+
+  // Body container
+  &__body {
+    padding: $size-3;
+    display: flex;
+    flex-direction: column;
+    gap: $size-3;
+
+    @include respond-to('mobile') {
+      padding: $size-2;
+      gap: $size-2;
+    }
+  }
+
+  // Info Section
+  &__info-section {
+    display: flex;
+    flex-direction: column;
+    gap: $size-2;
+  }
+
+  &__header-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: $size-1;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-headline-medium;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+    line-height: 1.2;
+  }
+
+  &__stats {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+  }
+
+  &__rating,
+  &__likes {
+    display: flex;
+    align-items: center;
+    gap: $size-05;
+    font-size: $font-size-body-small;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+
+    img {
+      width: $size-2;
+      height: $size-2;
+    }
+  }
+
+  &__description {
+    font-family: $font-family-base;
+    font-size: $font-size-body-small;
+    line-height: 1.5;
+    color: $color-on-bg-low;
+  }
+
+  // 4-Card Spec Boxes Grid per Figma!
+  &__specs-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $size-1;
+
+    @include respond-to('mobile') {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__spec-card {
+    background-color: $color-white;
+    border: $border-width-thin solid $color-outline;
+    border-radius: $corner-medium;
+    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0 0 $color-on-primary;
+    padding: $size-1;
+    display: flex;
+    flex-direction: column;
+    gap: calc(#{$size-05} / 2);
+
+    .spec-label {
+      font-family: $font-family-base;
+      font-size: $font-size-label-small;
+      color: $color-on-bg-low;
+      font-weight: $font-weight-regular;
+    }
+
+    .spec-value {
+      font-family: $font-family-base;
+      font-size: $font-size-body-small;
+      font-weight: $font-weight-bold;
+      color: $color-on-primary;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+    margin-top: $size-1;
+
+    @include respond-to('mobile') {
+      gap: $size-1;
+    }
+  }
+
+  &__play-btn {
+    flex: 1;
+    height: $size-6;
+    padding: $btn-medium-padding;
+    background-color: $color-primary;
+    color: $color-on-primary;
+    font-family: $font-family-base;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-bold;
+    border-radius: $corner-medium;
+    border: $border-width-base solid $color-on-primary;
+    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0 0 $color-on-primary;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: $color-primary-high;
+    }
+
+    &:focus-visible {
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
+    }
+
+    &:active {
+      transform: translateY($press-offset-y);
+      box-shadow: none;
+    }
+  }
+
+  &__favorite-btn {
+    flex: 1;
+    height: $size-6;
+    padding: $btn-medium-padding;
+    background-color: $color-white;
+    color: $color-on-primary;
+    font-family: $font-family-base;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-bold;
+    border-radius: $corner-medium;
+    border: $border-width-thin solid $color-outline;
+    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0 0 $color-on-primary;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $size-1;
+    transition: all 0.2s ease;
+
+    .fav-heart-icon {
+      stroke: $color-on-primary;
+      fill: none;
+      transition: stroke 0.2s ease;
+    }
+
+    &:hover {
+      background-color: $color-surface; // Cream hover per Figma!
+    }
+
+    &:focus-visible {
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
+    }
+
+    &:active {
+      transform: translateY($press-offset-y);
+      box-shadow: none;
+    }
+
+    &--active {
+      background-color: $color-white;
+      color: $color-on-primary;
+
+      .fav-heart-icon {
+        stroke: $color-like;
+        fill: none;
+      }
+
+      &:hover {
+        background-color: $color-surface;
+      }
+    }
+  }
+
+  // Top Records Section (Matching Figma Cards with Medals)
+  &__records-section {
+    display: flex;
+    flex-direction: column;
+    gap: $size-1;
+  }
+
+  &__section-title {
+    font-family: $font-family-heading;
+    font-size: $font-size-headline-small;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+    display: flex;
+    align-items: center;
+    gap: $size-05;
+
+    .title-trophy {
+      font-size: $font-size-headline-small;
+    }
+  }
+
+  &__records-list {
+    display: flex;
+    flex-direction: column;
+    gap: $size-1;
+  }
+
+  &__record-item {
+    background-color: $color-white;
+    border: none;
+    border-radius: $corner-medium;
+    padding: $size-1 $size-2;
+    min-height: $size-6;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__record-left {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-body-small;
+    color: $color-on-primary;
+  }
+
+  &__record-medal {
+    font-size: $font-size-body-large;
+    line-height: 1;
+  }
+
+  &__record-right {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+    font-size: $font-size-body-small;
+  }
+
+  &__record-score {
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+  }
+
+  &__record-date {
+    font-size: $font-size-label-small;
+    color: $color-on-bg-low;
+  }
+
+  // Comments Section (Matching Figma Avatar + Input + Cards)
+  &__comments-section {
+    display: flex;
+    flex-direction: column;
+    gap: $size-2;
+  }
+
+  &__comment-form {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+  }
+
+  &__user-avatar {
+    width: $size-5;
+    height: $size-5;
+    border-radius: $corner-full;
+    border: $border-width-base solid $color-on-primary;
+    background-color: $color-primary;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-label-large;
+    color: $color-on-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__comment-input {
+    flex: 1;
+    height: $size-5;
+    padding: 0 $size-2;
+    font-family: $font-family-base;
+    font-size: $font-size-body-small;
+    color: $color-on-primary;
+    background-color: $color-white;
+    border: $border-width-thin solid $color-outline;
+    border-radius: $corner-small;
+    outline: none;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+
+    &:focus {
+      border-color: $color-on-primary;
+      box-shadow: 0 0 0 $border-width-base rgba(58, 46, 191, 0.2);
+    }
+
+    &::placeholder {
+      color: $color-on-bg-low;
+    }
+  }
+
+  &__submit-comment-btn {
+    width: $size-5;
+    height: $size-5;
+    border-radius: $corner-small;
+    border: none;
+    background-color: $color-bg-footer;
+    color: $color-white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+
+    svg {
+      width: $size-2;
+      height: $size-2;
+      stroke: currentColor;
+      fill: none;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover {
+      background-color: $color-tertiary; // #3A2EBF hover per Figma!
+    }
+
+    &:not(:disabled):focus-visible {
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
+    }
+
+    &:not(:disabled):active {
+      transform: translateY($press-offset-y);
+    }
+  }
+
+  &__comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: $size-2;
+  }
+
+  &__comment-card {
+    background-color: $color-white;
+    border: $border-width-thin solid $color-outline;
+    border-radius: $corner-large;
+    padding: $size-2;
+    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0 0 $color-on-primary;
+    display: flex;
+    flex-direction: column;
+    gap: $size-1;
+  }
+
+  &__comment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__comment-author-group {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+  }
+
+  &__comment-avatar {
+    width: $size-3;
+    height: $size-3;
+    border-radius: $corner-full;
+    border: $border-width-thin solid $color-on-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-label-small;
+    color: $color-on-primary;
+    flex-shrink: 0;
+  }
+
+  &__comment-author {
+    font-weight: $font-weight-bold;
+    font-size: $font-size-body-small;
+    color: $color-on-primary;
+  }
+
+  &__comment-date {
+    font-size: $font-size-label-small;
+    color: $color-on-bg-low;
+  }
+
+  &__comment-text {
+    font-size: $font-size-body-small;
+    line-height: 1.4;
+    color: $color-on-primary;
+  }
+
+  &__comment-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; // Left-aligned in Figma!
+  }
+
+  &__comment-like-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-05;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    font-size: $font-size-body-small;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    .comment-heart-icon {
+      width: $size-2;
+      height: $size-2;
+      stroke: $color-on-primary;
+      fill: none;
+      transition: stroke 0.2s ease;
+    }
+
+    &:hover {
+      color: $color-like;
+      .comment-heart-icon {
+        stroke: $color-like;
+      }
+    }
+
+    &:focus-visible {
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
+    }
+
+    &--active {
+      color: $color-like; // Red text per Figma!
+
+      .comment-heart-icon {
+        stroke: $color-like; // Red outline heart per Figma!
+        fill: none;
+      }
+    }
+  }
+}

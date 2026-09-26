@@ -39,7 +39,7 @@
       height: $size-4;
       background-color: $color-primary; // #FFD02B
       border-radius: $corner-extra-large;
-      border: 1.5px solid $color-on-primary;
+      border: $border-width-medium solid $color-on-primary;
 
       @include respond-to('tablet') {
         height: $size-3;
@@ -67,7 +67,7 @@
   width: 100%;
   background-color: $color-white;
   border-radius: $corner-large;
-  border: 2.5px solid $color-on-primary;
+  border: $border-width-thick solid $color-on-primary;
   box-shadow: $shadow-level-2;
   overflow: hidden;
 
@@ -97,11 +97,11 @@
         font-family: $font-family-base;
         font-size: $font-size-label-large;
         font-weight: $font-weight-bold;
-        letter-spacing: 0.5px;
+        letter-spacing: $letter-spacing-wide;
         text-transform: uppercase;
         vertical-align: middle;
         text-align: center;
-        border-bottom: 2px solid $color-on-primary;
+        border-bottom: $border-width-base solid $color-on-primary;
 
         .th-mobile {
           display: none;
@@ -132,7 +132,7 @@
 
   tbody {
     tr {
-      border-bottom: 1px solid $color-outline;
+      border-bottom: $border-width-thin solid $color-outline;
       background-color: $color-bg;
       transition: background-color 0.2s ease;
 
@@ -154,12 +154,12 @@
         color: $color-on-primary;
 
         @include respond-to('tablet') {
-          padding: calc(#{$size-2} - 2px) $size-2;
+          padding: calc(#{$size-2} - #{$size-05} / 2) $size-2;
           font-size: $font-size-body-small;
         }
 
         @include respond-to('mobile') {
-          padding: calc(#{$size-2} + 4px) $size-1;
+          padding: calc(#{$size-2} + #{$size-05}) $size-1;
           font-size: $font-size-body-small;
         }
       }
@@ -171,12 +171,12 @@
     width: $size-10;
 
     @include respond-to('mobile') {
-      width: calc(#{$size-6} + 2px);
+      width: calc(#{$size-6} + #{$size-05} / 2);
     }
   }
 
   .col-player {
-    min-width: calc(#{$size-15} + #{$size-7} + 4px);
+    min-width: calc(#{$size-15} + #{$size-7} + #{$size-05});
 
     @include respond-to('mobile') {
       min-width: $size-15;
@@ -222,10 +222,10 @@
 }
 
 .player-avatar {
-  width: calc(#{$size-4} + 4px);
-  height: calc(#{$size-4} + 4px);
+  width: calc(#{$size-4} + #{$size-05});
+  height: calc(#{$size-4} + #{$size-05});
   border-radius: 50%;
-  border: 1.5px solid $color-on-primary;
+  border: $border-width-medium solid $color-on-primary;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -235,8 +235,8 @@
   flex-shrink: 0;
 
   @include respond-to('tablet') {
-    width: calc(#{$size-3} + 4px);
-    height: calc(#{$size-3} + 4px);
+    width: calc(#{$size-3} + #{$size-05});
+    height: calc(#{$size-3} + #{$size-05});
     font-size: $font-size-label-small;
   }
   @include respond-to('mobile') {
@@ -293,7 +293,7 @@
 .favorite-badge {
   display: inline-block;
   padding: $size-05 $corner-medium;
-  border: 1.5px solid $color-on-primary;
+  border: $border-width-medium solid $color-on-primary;
 
   border-radius: $radius-full;
   font-size: $font-size-label-large;

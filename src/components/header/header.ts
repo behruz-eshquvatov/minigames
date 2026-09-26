@@ -1,9 +1,13 @@
 import logoPng from '../../assets/images/logo.png';
 import './header.scss';
 
+export type PageType = 'home' | 'library';
+
 export interface HeaderCallbacks {
+  activePage?: PageType;
   onLoginClick?: () => void;
   onSignUpClick?: () => void;
+  onNavigate?: (page: PageType) => void;
 }
 
 export class Header {
@@ -12,15 +16,32 @@ export class Header {
   private burgerButton!: HTMLButtonElement;
   private mobileMenuOverlay!: HTMLDivElement;
   private callbacks: HeaderCallbacks;
+  private activePage: PageType;
 
   public constructor(callbacks: HeaderCallbacks = {}) {
     this.callbacks = callbacks;
+    this.activePage = callbacks.activePage || 'home';
     this.element = this.createHeaderElement();
     this.setupEventListeners();
   }
 
   public getElement(): HTMLElement {
     return this.element;
+  }
+
+  public setActivePage(page: PageType): void {
+    this.activePage = page;
+    const desktopLinks = this.element.querySelectorAll<HTMLAnchorElement>('.site-header__nav-link');
+    for (const link of desktopLinks) {
+      const target = link.dataset.page as PageType | null;
+      link.classList.toggle('site-header__nav-link--active', target === page);
+    }
+    const mobileLinks =
+      this.mobileMenuOverlay.querySelectorAll<HTMLAnchorElement>('.mobile-menu__nav-link');
+    for (const link of mobileLinks) {
+      const target = link.dataset.page as PageType | null;
+      link.classList.toggle('mobile-menu__nav-link--active', target === page);
+    }
   }
 
   private createHeaderElement(): HTMLElement {
@@ -40,6 +61,11 @@ export class Header {
       </div>
       <span class="site-header__logo-text">MiniGames</span>
     `;
+    logo.addEventListener('click', (e: MouseEvent): void => {
+      e.preventDefault();
+      this.setActivePage('home');
+      this.callbacks.onNavigate?.('home');
+    });
 
     // Desktop Nav
     const nav: HTMLElement = document.createElement('nav');
@@ -47,10 +73,14 @@ export class Header {
     nav.innerHTML = `
       <ul class="site-header__nav-list">
         <li class="site-header__nav-item">
-          <a href="#" class="site-header__nav-link site-header__nav-link--active">Home</a>
+          <a href="#" data-page="home" class="site-header__nav-link ${
+            this.activePage === 'home' ? 'site-header__nav-link--active' : ''
+          }">Home</a>
         </li>
         <li class="site-header__nav-item">
-          <a href="#library" class="site-header__nav-link">Library</a>
+          <a href="#library" data-page="library" class="site-header__nav-link ${
+            this.activePage === 'library' ? 'site-header__nav-link--active' : ''
+          }">Library</a>
         </li>
         <li class="site-header__nav-item">
           <a href="#" class="site-header__nav-link">Tournaments</a>
@@ -60,6 +90,25 @@ export class Header {
         </li>
       </ul>
     `;
+
+    // Attach desktop nav link listeners
+    const desktopHome = nav.querySelector<HTMLAnchorElement>('[data-page="home"]');
+    if (desktopHome) {
+      desktopHome.addEventListener('click', (e: MouseEvent): void => {
+        e.preventDefault();
+        this.setActivePage('home');
+        this.callbacks.onNavigate?.('home');
+      });
+    }
+
+    const desktopLibrary = nav.querySelector<HTMLAnchorElement>('[data-page="library"]');
+    if (desktopLibrary) {
+      desktopLibrary.addEventListener('click', (e: MouseEvent): void => {
+        e.preventDefault();
+        this.setActivePage('library');
+        this.callbacks.onNavigate?.('library');
+      });
+    }
 
     // Actions
     const loginBtn: HTMLButtonElement = document.createElement('button');
@@ -122,8 +171,12 @@ export class Header {
       </div>
       <div class="mobile-menu__content">
         <ul class="mobile-menu__nav-list">
-          <li><a href="#" class="mobile-menu__nav-link mobile-menu__nav-link--active">Home</a></li>
-          <li><a href="#library" class="mobile-menu__nav-link">Library</a></li>
+          <li><a href="#" data-page="home" class="mobile-menu__nav-link ${
+            this.activePage === 'home' ? 'mobile-menu__nav-link--active' : ''
+          }">Home</a></li>
+          <li><a href="#library" data-page="library" class="mobile-menu__nav-link ${
+            this.activePage === 'library' ? 'mobile-menu__nav-link--active' : ''
+          }">Library</a></li>
           <li><a href="#" class="mobile-menu__nav-link">Tournaments</a></li>
           <li><a href="#" class="mobile-menu__nav-link">Community</a></li>
         </ul>
@@ -133,6 +186,39 @@ export class Header {
         </div>
       </div>
     `;
+
+    const mobileLogo =
+      this.mobileMenuOverlay.querySelector<HTMLAnchorElement>('.mobile-menu__logo');
+    if (mobileLogo) {
+      mobileLogo.addEventListener('click', (e: MouseEvent): void => {
+        e.preventDefault();
+        this.closeMobileMenu();
+        this.setActivePage('home');
+        this.callbacks.onNavigate?.('home');
+      });
+    }
+
+    const mobileHome =
+      this.mobileMenuOverlay.querySelector<HTMLAnchorElement>('[data-page="home"]');
+    if (mobileHome) {
+      mobileHome.addEventListener('click', (e: MouseEvent): void => {
+        e.preventDefault();
+        this.closeMobileMenu();
+        this.setActivePage('home');
+        this.callbacks.onNavigate?.('home');
+      });
+    }
+
+    const mobileLibrary =
+      this.mobileMenuOverlay.querySelector<HTMLAnchorElement>('[data-page="library"]');
+    if (mobileLibrary) {
+      mobileLibrary.addEventListener('click', (e: MouseEvent): void => {
+        e.preventDefault();
+        this.closeMobileMenu();
+        this.setActivePage('library');
+        this.callbacks.onNavigate?.('library');
+      });
+    }
 
     // Mobile menu close button listener
     const mobileCloseBtn: HTMLButtonElement | null =

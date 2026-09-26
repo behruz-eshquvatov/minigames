@@ -1,0 +1,568 @@
+@use '../../styles/tokens' as *;
+@use '../../styles/breakpoints' as *;
+@use '../../styles/mixins' as *;
+
+.library-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $size-5;
+  padding: $size-6 $size-15;
+  max-width: $breakpoint-desktop;
+  margin: 0 auto;
+
+  @include respond-to('laptop') {
+    padding: $size-4 $size-6;
+  }
+
+  @include respond-to('tablet') {
+    padding: $size-4 $size-4;
+    gap: $size-4;
+  }
+
+  @include respond-to('mobile') {
+    padding: $size-3 $size-2;
+    gap: $size-3;
+  }
+}
+
+// Section Header: Title & Subtitle
+.library-header {
+  display: flex;
+  flex-direction: column;
+  gap: $size-1;
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-display-large;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+    line-height: 1.1;
+
+    @include respond-to('tablet') {
+      font-size: $font-size-display-medium;
+    }
+
+    @include respond-to('mobile') {
+      font-size: $font-size-display-small;
+    }
+  }
+
+  &__subtitle {
+    font-family: $font-family-base;
+    font-size: $font-size-body-medium;
+    color: $color-on-bg-low;
+
+    @include respond-to('mobile') {
+      font-size: $font-size-body-small;
+    }
+  }
+}
+
+// Filtering & Sorting Bar
+.library-filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: $size-2;
+
+  &__controls-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $size-2;
+
+    @include respond-to('tablet') {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $size-2;
+    }
+
+    @include respond-to('mobile') {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $size-2;
+    }
+  }
+
+  // Filter Chips Row (No wrap, horizontally swipeable with hidden scrollbar)
+  &__chips-wrapper {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: $size-05 0;
+    cursor: grab;
+    max-width: 100%;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  &__chips-row {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-1;
+    white-space: nowrap;
+  }
+
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    padding: $size-1 $size-2;
+    background-color: $color-white;
+    color: $color-on-primary;
+    border: $border-width-base solid $color-on-primary;
+    border-radius: $corner-full;
+    font-family: $font-family-base;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    flex-shrink: 0;
+
+    &:hover {
+      background-color: $color-surface;
+    }
+
+    &:focus-visible {
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
+    }
+
+    &--active {
+      background-color: $color-primary;
+      border-color: $color-on-primary;
+
+      &:hover {
+        background-color: $color-primary-high;
+      }
+    }
+  }
+
+  // Sorting Custom Dropdown
+  &__sort-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  &__sort-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-1;
+    padding: $size-1 $size-2;
+    background-color: $color-white;
+    color: $color-on-primary;
+    border: $border-width-base solid $color-on-primary;
+    border-radius: $corner-full;
+    font-family: $font-family-base;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: $color-surface; // Cream hover per Figma!
+    }
+
+    &:focus-visible {
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
+    }
+
+    .sort-chevron-icon {
+      width: $size-2;
+      height: $size-2;
+      transition: transform 0.2s ease;
+    }
+
+    &--open .sort-chevron-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__sort-dropdown {
+    position: absolute;
+    top: calc(100% + #{$size-1});
+    right: 0;
+    min-width: calc(#{$size-15} + #{$size-7} + #{$size-05});
+    background-color: $color-white;
+    border: $border-width-base solid $color-on-primary;
+    border-radius: $corner-medium;
+    box-shadow: $size-05 $size-05 0 0 $color-on-primary;
+    list-style: none;
+    padding: $size-05 0;
+    z-index: 50;
+    display: none;
+    overflow: hidden;
+
+    @include respond-to('tablet') {
+      right: auto;
+      left: 0;
+    }
+    @include respond-to('mobile') {
+      right: auto;
+      left: 0;
+    }
+
+    &--open {
+      display: block;
+    }
+  }
+
+  &__sort-item {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+    padding: $size-1 $size-2;
+    font-family: $font-family-base;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-medium;
+    color: $color-on-primary;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: $color-surface; // Cream hover per Figma!
+    }
+
+    &--active {
+      background-color: $color-primary; // Yellow #FFD02B per Figma!
+      font-weight: $font-weight-bold;
+
+      &:hover {
+        background-color: $color-primary;
+      }
+    }
+  }
+
+  &__sort-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $size-2;
+    font-size: $font-size-body-small;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+  }
+}
+
+// Game Cards Grid Section: 2 columns on desktop per Figma!
+.library-grid-section {
+  width: 100%;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $size-3;
+    width: 100%;
+
+    @include respond-to('tablet') {
+      grid-template-columns: 1fr;
+      gap: $size-2;
+    }
+
+    @include respond-to('mobile') {
+      grid-template-columns: 1fr;
+      gap: $size-2;
+    }
+  }
+}
+
+// Library Horizontal Game Card (Matching Figma Exactly!)
+.library-card {
+  background-color: $color-white;
+  border: $border-width-thick solid $color-on-primary;
+  border-radius: $corner-extra-large;
+  box-shadow: $shadow-level-2;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  height: calc(#{$size-15} + #{$size-10} - #{$size-05} * 5); // 220px card fixed height
+
+  @include respond-to('tablet') {
+    height: calc(#{$size-15} + #{$size-10}); // 200px tablet card height
+    border-radius: $corner-large;
+    box-shadow: $shadow-level-1;
+  }
+
+  @include respond-to('mobile') {
+    flex-direction: column;
+    height: auto;
+    border-radius: $corner-large;
+    box-shadow: $shadow-level-1;
+  }
+
+  &__thumb-wrap {
+    width: 44%;
+    height: 100%;
+    flex-shrink: 0;
+    overflow: hidden;
+    background-color: $color-surface;
+
+    @include respond-to('mobile') {
+      width: 100%;
+      height: calc(#{$size-15} + #{$size-5}); // 160px mobile thumb height
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__body {
+    width: 56%;
+    padding: $size-2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: $size-1;
+
+    @include respond-to('mobile') {
+      width: 100%;
+      padding: $size-2;
+    }
+  }
+
+  &__top-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $size-1;
+  }
+
+  &__title-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: $size-1;
+    min-width: 0;
+  }
+
+  &__title {
+    font-family: $font-family-heading;
+    font-size: $font-size-headline-small;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include respond-to('mobile') {
+      font-size: $font-size-body-large;
+    }
+  }
+
+  &__category {
+    font-family: $font-family-base;
+    font-size: $font-size-label-small;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+    background-color: $color-secondary;
+    border: $border-width-thin solid $color-on-primary;
+    border-radius: $corner-full;
+    padding: calc(#{$size-05} / 2) $size-1;
+    text-transform: capitalize;
+  }
+
+  &__price {
+    font-family: $font-family-base;
+    font-size: $font-size-headline-small;
+    font-weight: $font-weight-bold;
+    color: $color-price-free;
+    flex-shrink: 0;
+
+    &--paid {
+      color: $color-on-primary;
+    }
+  }
+
+  &__description {
+    font-family: $font-family-base;
+    font-size: $font-size-body-small;
+    line-height: 1.4;
+    color: $color-on-bg-low;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__bottom-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: $size-1;
+  }
+
+  &__stats {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+  }
+
+  &__rating,
+  &__likes {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-05;
+    font-family: $font-family-base;
+    font-size: $font-size-body-small;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+
+    img {
+      width: $size-2;
+      height: $size-2;
+    }
+  }
+
+  &__details-btn {
+    padding: $size-05 $size-2;
+    background-color: $color-primary;
+    color: $color-on-primary;
+    font-family: $font-family-base;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-bold;
+    border-radius: $corner-medium;
+    border: $border-width-base solid $color-on-primary;
+    box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0 0 $color-on-primary;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: $color-primary-high;
+    }
+
+    &:focus-visible {
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
+    }
+
+    &:active {
+      transform: translateY($press-offset-y);
+      box-shadow: none;
+    }
+  }
+}
+
+// Pagination Section (Matching Figma round circles!)
+.library-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $size-1;
+  padding: $size-3 0;
+
+  &__arrow-btn {
+    width: $size-5;
+    height: $size-5;
+    border-radius: $corner-full;
+    border: $border-width-medium solid $color-on-primary;
+    background-color: $color-white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    img {
+      width: $size-2;
+      height: $size-2;
+      display: block;
+    }
+
+    &--next img {
+      transform: rotate(180deg);
+    }
+
+    &:hover:not(:disabled) {
+      background-color: $color-surface;
+    }
+
+    &:focus-visible {
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY($press-offset-y);
+    }
+
+    &:disabled {
+      background-color: $color-white;
+      border-color: $color-outline;
+      cursor: not-allowed;
+      pointer-events: none;
+
+      img {
+        opacity: 0.3;
+      }
+    }
+  }
+
+  &__pages-list {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__page-btn {
+    width: $size-5;
+    height: $size-5;
+    border-radius: $corner-full;
+    border: $border-width-medium solid $color-on-primary;
+    background-color: $color-white;
+    color: $color-on-primary;
+    font-family: $font-family-base;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(&--active) {
+      background-color: $color-surface;
+    }
+
+    &:focus-visible {
+      outline: $outline-width solid $color-tertiary;
+      outline-offset: $outline-offset;
+    }
+
+    &:active {
+      transform: translateY($press-offset-y);
+    }
+
+    &--active {
+      background-color: $color-on-primary; // Dark purple circle per Figma!
+      color: $color-white;
+      border-color: $color-on-primary;
+      cursor: default;
+    }
+
+    // Mobile limit: 3 pages per spec
+    &--desktop-only {
+      @include respond-to('mobile') {
+        display: none !important;
+      }
+    }
+  }
+}
