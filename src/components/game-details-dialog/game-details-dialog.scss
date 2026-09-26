@@ -110,35 +110,6 @@
       );
     }
 
-    &-zoom-btn {
-      position: absolute;
-      top: $size-2;
-      right: calc(#{$size-2} + #{$size-5} + #{$size-1});
-      width: $size-5;
-      height: $size-5;
-      background-color: rgba(255, 255, 255, 0.45);
-      border-radius: $corner-full;
-      border: $border-width-medium solid rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(2px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: $color-white;
-      transition: all 0.2s ease;
-      z-index: 2;
-
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.7);
-      }
-
-      svg {
-        width: $size-2;
-        height: $size-2;
-        stroke: currentColor;
-      }
-    }
-
     &-close-btn {
       position: absolute;
       top: $size-2;
