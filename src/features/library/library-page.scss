@@ -298,7 +298,6 @@
   display: flex;
   flex-direction: row;
   height: calc(#{$size-15} + #{$size-10} - #{$size-05} * 5); // 220px card fixed height
-  transition: all 0.2s ease;
 
   @include respond-to('tablet') {
     height: calc(#{$size-15} + #{$size-10}); // 200px tablet card height
@@ -311,11 +310,6 @@
     height: auto;
     border-radius: $corner-large;
     box-shadow: $shadow-level-1;
-  }
-
-  &:hover {
-    transform: translateY(-#{$press-offset-y * 2});
-    box-shadow: $shadow-level-3;
   }
 
   &__thumb-wrap {
