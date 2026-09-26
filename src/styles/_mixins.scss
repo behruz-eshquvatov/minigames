@@ -1,0 +1,39 @@
+@use 'tokens' as *;
+@use 'breakpoints' as *;
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin card-surface {
+  background-color: $color-surface;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+}
+
+@mixin section-container {
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: $size-5 $size-15;
+
+  @media (max-width: 1280px) {
+    padding: $size-4 $size-6;
+  }
+
+  @include respond-to('tablet') {
+    padding: $size-3 $size-4;
+  }
+
+  @include respond-to('mobile') {
+    padding: $size-2 $size-2;
+  }
+}

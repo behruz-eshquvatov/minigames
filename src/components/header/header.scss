@@ -1,0 +1,322 @@
+@use '../../styles/tokens' as *;
+@use '../../styles/breakpoints' as *;
+@use '../../styles/mixins' as *;
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: $color-bg;
+  border-bottom: 2px solid $color-black;
+  width: 100%;
+
+  &__container {
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: $size-2 $size-4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    @include respond-to('mobile') {
+      padding: $size-2 $size-2;
+    }
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+    text-decoration: none;
+    color: $color-on-primary;
+    font-family: $font-family-heading;
+    font-size: $font-size-headline-small;
+    font-weight: $font-weight-bold;
+
+    &-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &__right-controls {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+  }
+
+  &__nav-wrapper {
+    display: flex;
+    align-items: center;
+    gap: $size-4;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  &__nav {
+    display: flex;
+
+    &-list {
+      display: flex;
+      align-items: center;
+      gap: $size-4;
+      list-style: none;
+    }
+
+    &-link {
+      font-family: $font-family-base;
+      font-size: $font-size-body-medium;
+      font-weight: $font-weight-medium;
+      color: $color-on-bg;
+      transition: color 0.2s ease;
+
+      &:hover,
+      &--active {
+        color: $color-on-primary;
+      }
+
+      &--active {
+        font-weight: $font-weight-bold;
+      }
+    }
+  }
+
+  &__signup-btn {
+    @media (max-width: 480px) {
+      display: none !important;
+    }
+  }
+
+  &__burger-btn {
+    display: none;
+    width: $size-5;
+    height: $size-5;
+    padding: $size-1;
+    background-color: $color-white;
+    border: 2px solid $color-on-primary;
+    border-radius: $corner-medium;
+    cursor: pointer;
+    z-index: 101;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $color-surface;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-tertiary;
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 768px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .site-header__burger-icon {
+      display: flex;
+      flex-direction: column;
+      gap: $size-05;
+      width: calc(#{$size-2} + 2px);
+    }
+
+    .site-header__burger-line {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background-color: $color-on-primary;
+      border-radius: 2px;
+      transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
+    }
+
+    &--open {
+      .site-header__burger-line:nth-child(1) {
+        transform: translateY(calc(#{$size-1} - 2px)) rotate(45deg);
+      }
+      .site-header__burger-line:nth-child(2) {
+        opacity: 0;
+      }
+      .site-header__burger-line:nth-child(3) {
+        transform: translateY(calc(2px - #{$size-1})) rotate(-45deg);
+      }
+    }
+  }
+}
+
+// Button Global Styles
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-family-base;
+  font-size: $font-size-label-large;
+  font-weight: $font-weight-bold;
+  border-radius: $corner-small;
+  padding: $btn-medium-padding;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: min-content;
+
+  &:focus-visible {
+    outline: 2px solid $color-tertiary;
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &--primary {
+    background-color: $color-primary;
+    color: $color-on-primary;
+    border: 2px solid $color-black;
+
+    &:hover {
+      background-color: $color-primary-high;
+    }
+  }
+
+  &--outline {
+    background-color: $color-white;
+    border: 2px solid $color-black;
+    color: $color-on-primary;
+
+    &:hover {
+      background-color: $color-surface;
+    }
+  }
+
+  &--outline-dark {
+    background-color: $color-bg-footer;
+    border: 2px solid $color-white;
+    color: $color-white;
+
+    &:hover {
+      background-color: $color-bg-footer-low;
+    }
+  }
+}
+
+// Mobile Menu Overlay (Matching Figma Open Menu Specification)
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: $color-bg-footer; // #1E1B3A
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: $size-3; // 24px on all sides
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+
+  &--open {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: $size-4;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+    text-decoration: none;
+    color: $color-white;
+    font-family: $font-family-heading;
+    font-size: $font-size-headline-small;
+    font-weight: $font-weight-bold;
+
+    &-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &__close-btn {
+    width: $size-5;
+    height: $size-5;
+    background-color: $color-bg-footer-low;
+    border-radius: $corner-medium;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $color-bg-footer-lowest;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  &__nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: $size-3;
+    margin: 0;
+  }
+
+  &__nav-link {
+    font-family: $font-family-heading;
+    font-size: $font-size-headline-small;
+    font-weight: $font-weight-medium;
+    color: $color-on-bg-footer;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover,
+    &--active {
+      color: $color-primary;
+    }
+    &--active {
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: $size-2;
+    margin-top: auto;
+    padding-bottom: 0;
+
+    .btn {
+      width: 100%;
+      height: $size-6;
+    }
+  }
+}

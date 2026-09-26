@@ -1,0 +1,204 @@
+// Base Colors
+$color-white: #ffffff; // bg, text color
+$color-black: #000000; // gradient
+
+// General Colors
+$color-bg: #f6f8f3; // base background
+$color-on-bg: #5f5d75; // base text-color
+$color-on-bg-low: #737380; // text-color for additional info
+$color-bg-footer: #1e1b3a; // footer background
+$color-bg-footer-low: #2a264f; // social-link
+$color-bg-footer-lowest: #3c376e; // social-link hover
+$color-on-bg-footer: #b9b5c9; // footer text-color
+$color-surface: #fff8e5; // button-hover
+$color-surface-low: #fffcf5; // input focus
+$color-primary: #ffd02b; // button, text-color
+$color-primary-low: #fde047; // sort-action
+$color-primary-high: #e5b800; // button-hover
+$color-on-primary: #242145; // primary text-color
+$color-secondary: #f0eeff; // badge
+$color-tertiary: #3a2ebf; // table header, button hover
+$color-like: #ff4848; // like icon
+$color-error: #b3261e; // validation error
+$color-price-free: #088a8f; // price
+
+// Borders
+$color-outline: #e6e7eb; // border
+$color-outline-variant: #d2d2d2; // border
+
+// Additional (Avatars)
+$color-avatar-random-1: #e0eef6; // avatar bg
+$color-avatar-random-2: #a3e2c9; // avatar bg
+$color-avatar-random-3: #bce3ff; // avatar bg
+$color-avatar-random-4: #ffc6ff; // avatar bg
+$color-avatar-random-5: #e6dff5; // avatar bg
+
+// Legacy Aliases for Compatibility
+$color-background: $color-bg;
+$color-text: $color-on-bg;
+$color-text-secondary: $color-on-bg-low;
+
+// Typography Tokens (Font Sizes)
+$font-size-display-large: 56px;
+$font-size-display-medium: 36px;
+$font-size-display-small: 24px;
+$font-size-headline-large: 32px;
+$font-size-headline-medium: 24px;
+$font-size-headline-small: 20px;
+$font-size-body-large: 18px;
+$font-size-body-medium: 16px;
+$font-size-body-small: 14px;
+$font-size-label-extra-large: 16px;
+$font-size-label-large: 14px;
+$font-size-label-medium: 12px;
+$font-size-label-small: 10px;
+
+// Legacy Font Size Aliases
+$font-size-xs: $font-size-label-medium; // 12px
+$font-size-sm: $font-size-body-small; // 14px
+$font-size-md: $font-size-body-medium; // 16px
+$font-size-lg: $font-size-headline-small; // 20px
+$font-size-xl: $font-size-headline-medium; // 24px
+$font-size-2xl: $font-size-headline-large; // 32px
+$font-size-3xl: $font-size-display-large; // 56px
+
+// Font Weights
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+$font-weight-extra-bold: 800;
+$font-weight-semibold: 600;
+
+// Font Families
+$font-family-inter:
+  'Inter',
+  system-ui,
+  -apple-system,
+  sans-serif;
+$font-family-roboto:
+  'Roboto',
+  system-ui,
+  -apple-system,
+  sans-serif;
+
+$font-family-base: $font-family-inter;
+$font-family-heading: $font-family-roboto;
+
+// Size Tokens
+$size-05: 4px;
+$size-1: 8px;
+$size-2: 16px;
+$size-3: 24px;
+$size-4: 32px;
+$size-5: 40px;
+$size-6: 48px;
+$size-7: 56px;
+$size-8: 64px;
+$size-9: 72px;
+$size-10: 80px;
+$size-11: 88px;
+$size-12: 96px;
+$size-13: 104px;
+$size-14: 112px;
+$size-15: 120px;
+
+// Corner Radii Tokens
+$corner-extra-small: 4px;
+$corner-small: 8px;
+$corner-medium: 12px;
+$corner-large: 16px;
+$corner-extra-large: 24px;
+$corner-full: 9999px;
+
+// Corner Radii Aliases
+$radius-sm: $corner-extra-small;
+$radius-md: $corner-small;
+$radius-lg: $corner-medium;
+$radius-xl: $corner-large;
+$radius-full: $corner-full;
+
+// Button Tokens (Paddings)
+$btn-large-padding: 16px 24px;
+$btn-medium-padding: 10px 20px;
+$btn-small-padding: 8px 16px;
+$btn-icon-padding: 8px;
+
+// Legacy Button Size Aliases
+$button-height-sm: 32px;
+$button-height-md: 44px;
+$button-height-lg: 56px;
+$button-padding-x-sm: 12px;
+$button-padding-x-md: 20px;
+$button-padding-x-lg: 28px;
+
+// Shadow Tokens (Levels)
+$shadow-level-1: 4px 4px $color-on-primary;
+$shadow-level-2: 6px 6px $color-on-primary;
+$shadow-level-3: 8px 8px $color-on-primary;
+
+// Legacy Shadow Aliases
+$shadow-sm: $shadow-level-1;
+$shadow-md: $shadow-level-2;
+$shadow-lg: $shadow-level-3;
+
+// Spacing & Sizes (Legacy Aliases)
+$spacing-xs: $size-05;
+$spacing-sm: $size-1;
+$spacing-md: $size-2;
+$spacing-lg: $size-3;
+$spacing-xl: $size-4;
+$spacing-2xl: $size-6;
+
+// CSS Custom Properties (Design Tokens)
+:root {
+  --color-white: #{$color-white};
+  --color-black: #{$color-black};
+  --color-bg: #{$color-bg};
+  --color-on-bg: #{$color-on-bg};
+  --color-on-bg-low: #{$color-on-bg-low};
+  --color-bg-footer: #{$color-bg-footer};
+  --color-bg-footer-low: #{$color-bg-footer-low};
+  --color-bg-footer-lowest: #{$color-bg-footer-lowest};
+  --color-on-bg-footer: #{$color-on-bg-footer};
+  --color-surface: #{$color-surface};
+  --color-surface-low: #{$color-surface-low};
+  --color-primary: #{$color-primary};
+  --color-primary-low: #{$color-primary-low};
+  --color-primary-high: #{$color-primary-high};
+  --color-on-primary: #{$color-on-primary};
+  --color-secondary: #{$color-secondary};
+  --color-tertiary: #{$color-tertiary};
+  --color-like: #{$color-like};
+  --color-error: #{$color-error};
+  --color-price-free: #{$color-price-free};
+  --color-outline: #{$color-outline};
+  --color-outline-variant: #{$color-outline-variant};
+
+  --size-05: #{$size-05};
+  --size-1: #{$size-1};
+  --size-2: #{$size-2};
+  --size-3: #{$size-3};
+  --size-4: #{$size-4};
+  --size-5: #{$size-5};
+  --size-6: #{$size-6};
+  --size-7: #{$size-7};
+  --size-8: #{$size-8};
+  --size-9: #{$size-9};
+  --size-10: #{$size-10};
+  --size-11: #{$size-11};
+  --size-12: #{$size-12};
+  --size-13: #{$size-13};
+  --size-14: #{$size-14};
+  --size-15: #{$size-15};
+
+  --corner-extra-small: #{$corner-extra-small};
+  --corner-small: #{$corner-small};
+  --corner-medium: #{$corner-medium};
+  --corner-large: #{$corner-large};
+  --corner-extra-large: #{$corner-extra-large};
+  --corner-full: #{$corner-full};
+
+  --shadow-level-1: #{$shadow-level-1};
+  --shadow-level-2: #{$shadow-level-2};
+  --shadow-level-3: #{$shadow-level-3};
+}

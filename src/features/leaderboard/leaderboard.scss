@@ -1,0 +1,319 @@
+@use '../../styles/tokens' as *;
+@use '../../styles/breakpoints' as *;
+@use '../../styles/mixins' as *;
+
+.leaderboard-section {
+  @include section-container;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: $corner-medium;
+
+    @include respond-to('mobile') {
+      gap: $size-1;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+    font-family: $font-family-heading;
+    font-size: $font-size-headline-large;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+
+    @include respond-to('tablet') {
+      font-size: $font-size-headline-medium;
+    }
+
+    &-pill {
+      display: inline-block;
+      width: $size-1;
+      height: $size-4;
+      background-color: $color-primary; // #FFD02B
+      border-radius: $corner-extra-large;
+      border: 1.5px solid $color-on-primary;
+
+      @include respond-to('tablet') {
+        height: $size-3;
+      }
+    }
+
+    .title-mobile {
+      display: none;
+    }
+
+    @include respond-to('mobile') {
+      .title-desktop {
+        display: none;
+      }
+
+      .title-mobile {
+        font-size: $font-size-headline-medium;
+        display: inline;
+      }
+    }
+  }
+}
+
+.leaderboard-table-card {
+  width: 100%;
+  background-color: $color-white;
+  border-radius: $corner-large;
+  border: 2.5px solid $color-on-primary;
+  box-shadow: $shadow-level-2;
+  overflow: hidden;
+
+  @include respond-to('tablet') {
+    box-shadow: $shadow-level-1;
+  }
+
+  @include respond-to('mobile') {
+    border-radius: $corner-large;
+    box-shadow: $shadow-level-1;
+  }
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+
+  thead {
+    background-color: $color-tertiary; // #3A2EBF
+    color: $color-white;
+
+    tr {
+      th {
+        min-width: calc(#{$size-15} + #{$size-1});
+        padding: $size-3;
+        font-family: $font-family-base;
+        font-size: $font-size-label-large;
+        font-weight: $font-weight-bold;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        vertical-align: middle;
+        text-align: center;
+        border-bottom: 2px solid $color-on-primary;
+
+        .th-mobile {
+          display: none;
+        }
+
+        @include respond-to('tablet') {
+          .th-desktop {
+            display: none;
+          }
+
+          .th-mobile {
+            display: inline;
+          }
+        }
+
+        @include respond-to('tablet') {
+          padding: $size-2;
+          font-size: $font-size-body-small;
+        }
+        @include respond-to('mobile') {
+          min-width: auto;
+          padding: $size-2 $size-1;
+          font-size: $font-size-body-small;
+        }
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid $color-outline;
+      background-color: $color-bg;
+      transition: background-color 0.2s ease;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.6);
+      }
+
+      td {
+        padding: $size-2 $size-3;
+        vertical-align: middle;
+        text-align: center;
+        font-family: $font-family-base;
+        font-size: $font-size-body-medium;
+        font-weight: $font-weight-bold;
+        color: $color-on-primary;
+
+        @include respond-to('tablet') {
+          padding: calc(#{$size-2} - 2px) $size-2;
+          font-size: $font-size-body-small;
+        }
+
+        @include respond-to('mobile') {
+          padding: calc(#{$size-2} + 4px) $size-1;
+          font-size: $font-size-body-small;
+        }
+      }
+    }
+  }
+
+  // Column specific alignments and responsivness
+  .col-rank {
+    width: $size-10;
+
+    @include respond-to('mobile') {
+      width: calc(#{$size-6} + 2px);
+    }
+  }
+
+  .col-player {
+    min-width: calc(#{$size-15} + #{$size-7} + 4px);
+
+    @include respond-to('mobile') {
+      min-width: $size-15;
+    }
+  }
+
+  .col-games {
+    @include respond-to('mobile') {
+      display: none;
+    }
+  }
+
+  .col-favorite {
+    @include respond-to('tablet') {
+      display: none;
+    }
+
+    @include respond-to('mobile') {
+      display: none;
+    }
+  }
+}
+
+// Elements inside table cells
+.rank-badge {
+  font-family: $font-family-heading;
+  font-weight: $font-weight-bold;
+
+  &--1 {
+    color: $color-tertiary;
+    font-size: 1.1em;
+  }
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: $corner-medium;
+
+  @include respond-to('mobile') {
+    gap: $size-1;
+  }
+}
+
+.player-avatar {
+  width: calc(#{$size-4} + 4px);
+  height: calc(#{$size-4} + 4px);
+  border-radius: 50%;
+  border: 1.5px solid $color-on-primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-label-medium;
+  color: $color-on-primary;
+  flex-shrink: 0;
+
+  @include respond-to('tablet') {
+    width: calc(#{$size-3} + 4px);
+    height: calc(#{$size-3} + 4px);
+    font-size: $font-size-label-small;
+  }
+  @include respond-to('mobile') {
+    width: $size-3;
+    height: $size-3;
+    font-size: $font-size-label-small;
+  }
+}
+
+.player-name {
+  font-weight: $font-weight-bold;
+  color: $color-on-primary;
+  white-space: nowrap;
+}
+
+.score-mobile {
+  display: none;
+}
+
+@include respond-to('mobile') {
+  .score-desktop {
+    display: none;
+  }
+
+  .score-mobile {
+    display: inline;
+  }
+}
+
+.streak-short {
+  display: none;
+}
+
+@include respond-to('tablet') {
+  .streak-full {
+    display: none;
+  }
+
+  .streak-short {
+    display: inline;
+  }
+}
+
+@include respond-to('mobile') {
+  .streak-full {
+    display: none;
+  }
+
+  .streak-short {
+    display: inline;
+  }
+}
+
+.favorite-badge {
+  display: inline-block;
+  padding: $size-05 $corner-medium;
+  border: 1.5px solid $color-on-primary;
+
+  border-radius: $radius-full;
+  font-size: $font-size-label-large;
+  font-weight: $font-weight-semibold;
+  color: $color-on-primary;
+  background-color: transparent;
+  white-space: nowrap;
+}
+
+// Hide rows 4 and 5 on tablet & mobile
+@include respond-to('tablet') {
+  .leaderboard-row--rank-4,
+  .leaderboard-row--rank-5 {
+    display: none !important;
+  }
+}
+
+@include respond-to('mobile') {
+  .leaderboard-row--rank-4,
+  .leaderboard-row--rank-5 {
+    display: none !important;
+  }
+}
