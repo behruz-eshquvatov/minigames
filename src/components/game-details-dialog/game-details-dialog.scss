@@ -256,7 +256,7 @@
 
   &__spec-card {
     background-color: $color-white;
-    border: $border-width-base solid $color-on-primary;
+    border: $border-width-thin solid $color-outline;
     border-radius: $corner-medium;
     box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0 0 $color-on-primary;
     padding: $size-1;
@@ -330,7 +330,7 @@
     font-size: $font-size-label-large;
     font-weight: $font-weight-bold;
     border-radius: $corner-medium;
-    border: $border-width-base solid $color-on-primary;
+    border: $border-width-thin solid $color-outline;
     box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0 0 $color-on-primary;
     cursor: pointer;
     display: inline-flex;
@@ -403,7 +403,7 @@
 
   &__record-item {
     background-color: $color-white;
-    border: $border-width-base solid $color-on-primary;
+    border: $border-width-thin solid $color-outline;
     border-radius: $corner-medium;
     padding: $size-1 $size-2;
     box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0 0 $color-on-primary;
@@ -544,7 +544,7 @@
 
   &__comment-card {
     background-color: $color-white;
-    border: $border-width-base solid $color-on-primary;
+    border: $border-width-thin solid $color-outline;
     border-radius: $corner-large;
     padding: $size-2;
     box-shadow: calc(#{$size-05} / 2) calc(#{$size-05} / 2) 0 0 $color-on-primary;
